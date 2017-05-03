@@ -589,11 +589,14 @@
     <menu id="6">
       <phrase id="menutext" value="Setup" />
     </menu>
+    <menu id="12">
+      <phrase id="menutext" value="Chart of Account" />
+    </menu>
     <menu id="1">
-      <phrase id="menutext" value="COA Lv. 1" />
+      <phrase id="menutext" value="Lv. 1" />
     </menu>
     <menu id="2">
-      <phrase id="menutext" value="COA Lv. 2" />
+      <phrase id="menutext" value="Lv. 2" />
     </menu>
     <menu id="4">
       <phrase id="menutext" value="t user" />
