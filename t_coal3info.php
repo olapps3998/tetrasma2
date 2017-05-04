@@ -1,21 +1,23 @@
 <?php
 
 // Global variable for table object
-$t_coal1 = NULL;
+$t_coal3 = NULL;
 
 //
-// Table class for t_coal1
+// Table class for t_coal3
 //
-class ct_coal1 extends cTable {
+class ct_coal3 extends cTable {
 	var $AuditTrailOnAdd = TRUE;
 	var $AuditTrailOnEdit = TRUE;
 	var $AuditTrailOnDelete = TRUE;
 	var $AuditTrailOnView = FALSE;
 	var $AuditTrailOnViewData = FALSE;
 	var $AuditTrailOnSearch = FALSE;
+	var $coal3_id;
 	var $coal1_id;
-	var $coal1_no;
-	var $coal1_nm;
+	var $coal2_id;
+	var $coal3_no;
+	var $coal3_nm;
 
 	//
 	// Table class constructor
@@ -25,12 +27,12 @@ class ct_coal1 extends cTable {
 
 		// Language object
 		if (!isset($Language)) $Language = new cLanguage();
-		$this->TableVar = 't_coal1';
-		$this->TableName = 't_coal1';
+		$this->TableVar = 't_coal3';
+		$this->TableName = 't_coal3';
 		$this->TableType = 'TABLE';
 
 		// Update Table
-		$this->UpdateTable = "`t_coal1`";
+		$this->UpdateTable = "`t_coal3`";
 		$this->DBID = 'DB';
 		$this->ExportAll = TRUE;
 		$this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -38,30 +40,47 @@ class ct_coal1 extends cTable {
 		$this->ExportPageSize = "a4"; // Page size (PDF only)
 		$this->ExportExcelPageOrientation = ""; // Page orientation (PHPExcel only)
 		$this->ExportExcelPageSize = ""; // Page size (PHPExcel only)
-		$this->DetailAdd = FALSE; // Allow detail add
-		$this->DetailEdit = FALSE; // Allow detail edit
-		$this->DetailView = FALSE; // Allow detail view
+		$this->DetailAdd = TRUE; // Allow detail add
+		$this->DetailEdit = TRUE; // Allow detail edit
+		$this->DetailView = TRUE; // Allow detail view
 		$this->ShowMultipleDetails = FALSE; // Show multiple details
 		$this->GridAddRowCount = 5;
 		$this->AllowAddDeleteRow = ew_AllowAddDeleteRow(); // Allow add/delete row
 		$this->UserIDAllowSecurity = 0; // User ID Allow
 		$this->BasicSearch = new cBasicSearch($this->TableVar);
 
+		// coal3_id
+		$this->coal3_id = new cField('t_coal3', 't_coal3', 'x_coal3_id', 'coal3_id', '`coal3_id`', '`coal3_id`', 3, -1, FALSE, '`coal3_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->coal3_id->Sortable = TRUE; // Allow sort
+		$this->coal3_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['coal3_id'] = &$this->coal3_id;
+
 		// coal1_id
-		$this->coal1_id = new cField('t_coal1', 't_coal1', 'x_coal1_id', 'coal1_id', '`coal1_id`', '`coal1_id`', 3, -1, FALSE, '`coal1_id`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'NO');
+		$this->coal1_id = new cField('t_coal3', 't_coal3', 'x_coal1_id', 'coal1_id', '(select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id)', '(select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id)', 3, -1, FALSE, '`EV__coal1_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->coal1_id->FldIsCustom = TRUE; // Custom field
 		$this->coal1_id->Sortable = TRUE; // Allow sort
+		$this->coal1_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
+		$this->coal1_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
 		$this->coal1_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
 		$this->fields['coal1_id'] = &$this->coal1_id;
 
-		// coal1_no
-		$this->coal1_no = new cField('t_coal1', 't_coal1', 'x_coal1_no', 'coal1_no', '`coal1_no`', '`coal1_no`', 200, -1, FALSE, '`coal1_no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->coal1_no->Sortable = TRUE; // Allow sort
-		$this->fields['coal1_no'] = &$this->coal1_no;
+		// coal2_id
+		$this->coal2_id = new cField('t_coal3', 't_coal3', 'x_coal2_id', 'coal2_id', '`coal2_id`', '`coal2_id`', 3, -1, FALSE, '`EV__coal2_id`', TRUE, TRUE, TRUE, 'FORMATTED TEXT', 'SELECT');
+		$this->coal2_id->Sortable = TRUE; // Allow sort
+		$this->coal2_id->UsePleaseSelect = TRUE; // Use PleaseSelect by default
+		$this->coal2_id->PleaseSelectText = $Language->Phrase("PleaseSelect"); // PleaseSelect text
+		$this->coal2_id->FldDefaultErrMsg = $Language->Phrase("IncorrectInteger");
+		$this->fields['coal2_id'] = &$this->coal2_id;
 
-		// coal1_nm
-		$this->coal1_nm = new cField('t_coal1', 't_coal1', 'x_coal1_nm', 'coal1_nm', '`coal1_nm`', '`coal1_nm`', 200, -1, FALSE, '`coal1_nm`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
-		$this->coal1_nm->Sortable = TRUE; // Allow sort
-		$this->fields['coal1_nm'] = &$this->coal1_nm;
+		// coal3_no
+		$this->coal3_no = new cField('t_coal3', 't_coal3', 'x_coal3_no', 'coal3_no', '`coal3_no`', '`coal3_no`', 200, -1, FALSE, '`coal3_no`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->coal3_no->Sortable = TRUE; // Allow sort
+		$this->fields['coal3_no'] = &$this->coal3_no;
+
+		// coal3_nm
+		$this->coal3_nm = new cField('t_coal3', 't_coal3', 'x_coal3_nm', 'coal3_nm', '`coal3_nm`', '`coal3_nm`', 200, -1, FALSE, '`coal3_nm`', FALSE, FALSE, FALSE, 'FORMATTED TEXT', 'TEXT');
+		$this->coal3_nm->Sortable = TRUE; // Allow sort
+		$this->fields['coal3_nm'] = &$this->coal3_nm;
 	}
 
 	// Set Field Visibility
@@ -93,9 +112,86 @@ class ct_coal1 extends cTable {
 			} else {
 				$this->setSessionOrderBy($sSortField . " " . $sThisSort); // Save to Session
 			}
+			$sSortFieldList = ($ofld->FldVirtualExpression <> "") ? $ofld->FldVirtualExpression : $sSortField;
+			if ($ctrl) {
+				$sOrderByList = $this->getSessionOrderByList();
+				if (strpos($sOrderByList, $sSortFieldList . " " . $sLastSort) !== FALSE) {
+					$sOrderByList = str_replace($sSortFieldList . " " . $sLastSort, $sSortFieldList . " " . $sThisSort, $sOrderByList);
+				} else {
+					if ($sOrderByList <> "") $sOrderByList .= ", ";
+					$sOrderByList .= $sSortFieldList . " " . $sThisSort;
+				}
+				$this->setSessionOrderByList($sOrderByList); // Save to Session
+			} else {
+				$this->setSessionOrderByList($sSortFieldList . " " . $sThisSort); // Save to Session
+			}
 		} else {
 			if (!$ctrl) $ofld->setSort("");
 		}
+	}
+
+	// Session ORDER BY for List page
+	function getSessionOrderByList() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST];
+	}
+
+	function setSessionOrderByList($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_ORDER_BY_LIST] = $v;
+	}
+
+	// Current master table name
+	function getCurrentMasterTable() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE];
+	}
+
+	function setCurrentMasterTable($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_MASTER_TABLE] = $v;
+	}
+
+	// Session master WHERE clause
+	function GetMasterFilter() {
+
+		// Master filter
+		$sMasterFilter = "";
+		if ($this->getCurrentMasterTable() == "t_coal2") {
+			if ($this->coal2_id->getSessionValue() <> "")
+				$sMasterFilter .= "`coal2_id`=" . ew_QuotedValue($this->coal2_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+			if ($this->coal1_id->getSessionValue() <> "")
+				$sMasterFilter .= " AND `coal1_id`=" . ew_QuotedValue($this->coal1_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+		}
+		return $sMasterFilter;
+	}
+
+	// Session detail WHERE clause
+	function GetDetailFilter() {
+
+		// Detail filter
+		$sDetailFilter = "";
+		if ($this->getCurrentMasterTable() == "t_coal2") {
+			if ($this->coal2_id->getSessionValue() <> "")
+				$sDetailFilter .= "`coal2_id`=" . ew_QuotedValue($this->coal2_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+			if ($this->coal1_id->getSessionValue() <> "")
+				$sDetailFilter .= " AND (select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id)=" . ew_QuotedValue($this->coal1_id->getSessionValue(), EW_DATATYPE_NUMBER, "DB");
+			else
+				return "";
+		}
+		return $sDetailFilter;
+	}
+
+	// Master filter
+	function SqlMasterFilter_t_coal2() {
+		return "`coal2_id`=@coal2_id@ AND `coal1_id`=@coal1_id@";
+	}
+
+	// Detail filter
+	function SqlDetailFilter_t_coal2() {
+		return "`coal2_id`=@coal2_id@ AND (select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id)=@coal1_id@";
 	}
 
 	// Current detail table name
@@ -112,12 +208,14 @@ class ct_coal1 extends cTable {
 
 		// Detail url
 		$sDetailUrl = "";
-		if ($this->getCurrentDetailTable() == "t_coal2") {
-			$sDetailUrl = $GLOBALS["t_coal2"]->GetListUrl() . "?" . EW_TABLE_SHOW_MASTER . "=" . $this->TableVar;
+		if ($this->getCurrentDetailTable() == "t_coal4") {
+			$sDetailUrl = $GLOBALS["t_coal4"]->GetListUrl() . "?" . EW_TABLE_SHOW_MASTER . "=" . $this->TableVar;
 			$sDetailUrl .= "&fk_coal1_id=" . urlencode($this->coal1_id->CurrentValue);
+			$sDetailUrl .= "&fk_coal2_id=" . urlencode($this->coal2_id->CurrentValue);
+			$sDetailUrl .= "&fk_coal3_id=" . urlencode($this->coal3_id->CurrentValue);
 		}
 		if ($sDetailUrl == "") {
-			$sDetailUrl = "t_coal1list.php";
+			$sDetailUrl = "t_coal3list.php";
 		}
 		return $sDetailUrl;
 	}
@@ -126,7 +224,7 @@ class ct_coal1 extends cTable {
 	var $_SqlFrom = "";
 
 	function getSqlFrom() { // From
-		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_coal1`";
+		return ($this->_SqlFrom <> "") ? $this->_SqlFrom : "`t_coal3`";
 	}
 
 	function SqlFrom() { // For backward compatibility
@@ -139,7 +237,7 @@ class ct_coal1 extends cTable {
 	var $_SqlSelect = "";
 
 	function getSqlSelect() { // Select
-		return ($this->_SqlSelect <> "") ? $this->_SqlSelect : "SELECT * FROM " . $this->getSqlFrom();
+		return ($this->_SqlSelect <> "") ? $this->_SqlSelect : "SELECT *, (select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id) AS `coal1_id` FROM " . $this->getSqlFrom();
 	}
 
 	function SqlSelect() { // For backward compatibility
@@ -148,6 +246,23 @@ class ct_coal1 extends cTable {
 
 	function setSqlSelect($v) {
 		$this->_SqlSelect = $v;
+	}
+	var $_SqlSelectList = "";
+
+	function getSqlSelectList() { // Select for List page
+		$select = "";
+		$select = "SELECT * FROM (" .
+			"SELECT *, (select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id) AS `coal1_id`, (SELECT CONCAT(`coal1_no`,'" . ew_ValueSeparator(1, $this->coal1_id) . "',`coal1_nm`) FROM `t_coal1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`coal1_id` = `t_coal3`.`coal1_id` LIMIT 1) AS `EV__coal1_id`, (SELECT CONCAT(`coal2_no`,'" . ew_ValueSeparator(1, $this->coal2_id) . "',`coal2_nm`) FROM `t_coal2` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`coal2_id` = `t_coal3`.`coal2_id` LIMIT 1) AS `EV__coal2_id` FROM `t_coal3`" .
+			") `EW_TMP_TABLE`";
+		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
+	}
+
+	function SqlSelectList() { // For backward compatibility
+		return $this->getSqlSelectList();
+	}
+
+	function setSqlSelectList($v) {
+		$this->_SqlSelectList = $v;
 	}
 	var $_SqlWhere = "";
 
@@ -260,15 +375,44 @@ class ct_coal1 extends cTable {
 		ew_AddFilter($sFilter, $this->CurrentFilter);
 		$sFilter = $this->ApplyUserIDFilters($sFilter);
 		$this->Recordset_Selecting($sFilter);
-		$sSort = $this->getSessionOrderBy();
-		return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
-			$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		if ($this->UseVirtualFields()) {
+			$sSort = $this->getSessionOrderByList();
+			return ew_BuildSelectSql($this->getSqlSelectList(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		} else {
+			$sSort = $this->getSessionOrderBy();
+			return ew_BuildSelectSql($this->getSqlSelect(), $this->getSqlWhere(), $this->getSqlGroupBy(),
+				$this->getSqlHaving(), $this->getSqlOrderBy(), $sFilter, $sSort);
+		}
 	}
 
 	// Get ORDER BY clause
 	function GetOrderBy() {
-		$sSort = $this->getSessionOrderBy();
+		$sSort = ($this->UseVirtualFields()) ? $this->getSessionOrderByList() : $this->getSessionOrderBy();
 		return ew_BuildSelectSql("", "", "", "", $this->getSqlOrderBy(), "", $sSort);
+	}
+
+	// Check if virtual fields is used in SQL
+	function UseVirtualFields() {
+		$sWhere = $this->getSessionWhere();
+		$sOrderBy = $this->getSessionOrderByList();
+		if ($sWhere <> "")
+			$sWhere = " " . str_replace(array("(",")"), array("",""), $sWhere) . " ";
+		if ($sOrderBy <> "")
+			$sOrderBy = " " . str_replace(array("(",")"), array("",""), $sOrderBy) . " ";
+		if ($this->coal1_id->AdvancedSearch->SearchValue <> "" ||
+			$this->coal1_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->coal1_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->coal1_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if ($this->coal2_id->AdvancedSearch->SearchValue <> "" ||
+			$this->coal2_id->AdvancedSearch->SearchValue2 <> "" ||
+			strpos($sWhere, " " . $this->coal2_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		if (strpos($sOrderBy, " " . $this->coal2_id->FldVirtualExpression . " ") !== FALSE)
+			return TRUE;
+		return FALSE;
 	}
 
 	// Try to get record count
@@ -349,8 +493,8 @@ class ct_coal1 extends cTable {
 		if ($bInsert) {
 
 			// Get insert id if necessary
-			$this->coal1_id->setDbValue($conn->Insert_ID());
-			$rs['coal1_id'] = $this->coal1_id->DbValue;
+			$this->coal3_id->setDbValue($conn->Insert_ID());
+			$rs['coal3_id'] = $this->coal3_id->DbValue;
 			if ($this->AuditTrailOnAdd)
 				$this->WriteAuditTrailOnAdd($rs);
 		}
@@ -379,30 +523,10 @@ class ct_coal1 extends cTable {
 	// Update
 	function Update(&$rs, $where = "", $rsold = NULL, $curfilter = TRUE) {
 		$conn = &$this->Connection();
-
-		// Cascade Update detail table 't_coal2'
-		$bCascadeUpdate = FALSE;
-		$rscascade = array();
-		if (!is_null($rsold) && (isset($rs['coal1_id']) && $rsold['coal1_id'] <> $rs['coal1_id'])) { // Update detail field 'coal1_id'
-			$bCascadeUpdate = TRUE;
-			$rscascade['coal1_id'] = $rs['coal1_id']; 
-		}
-		if ($bCascadeUpdate) {
-			if (!isset($GLOBALS["t_coal2"])) $GLOBALS["t_coal2"] = new ct_coal2();
-			$rswrk = $GLOBALS["t_coal2"]->LoadRs("`coal1_id` = " . ew_QuotedValue($rsold['coal1_id'], EW_DATATYPE_NUMBER, 'DB')); 
-			while ($rswrk && !$rswrk->EOF) {
-				$rskey = array();
-				$fldname = 'coal2_id';
-				$rskey[$fldname] = $rswrk->fields[$fldname];
-				$bUpdate = $GLOBALS["t_coal2"]->Update($rscascade, $rskey, $rswrk->fields);
-				if (!$bUpdate) return FALSE;
-				$rswrk->MoveNext();
-			}
-		}
 		$bUpdate = $conn->Execute($this->UpdateSQL($rs, $where, $curfilter));
 		if ($bUpdate && $this->AuditTrailOnEdit) {
 			$rsaudit = $rs;
-			$fldname = 'coal1_id';
+			$fldname = 'coal3_id';
 			if (!array_key_exists($fldname, $rsaudit)) $rsaudit[$fldname] = $rsold[$fldname];
 			$this->WriteAuditTrailOnEdit($rsaudit, $rsold);
 		}
@@ -415,8 +539,8 @@ class ct_coal1 extends cTable {
 		if (is_array($where))
 			$where = $this->ArrayToFilter($where);
 		if ($rs) {
-			if (array_key_exists('coal1_id', $rs))
-				ew_AddFilter($where, ew_QuotedName('coal1_id', $this->DBID) . '=' . ew_QuotedValue($rs['coal1_id'], $this->coal1_id->FldDataType, $this->DBID));
+			if (array_key_exists('coal3_id', $rs))
+				ew_AddFilter($where, ew_QuotedName('coal3_id', $this->DBID) . '=' . ew_QuotedValue($rs['coal3_id'], $this->coal3_id->FldDataType, $this->DBID));
 		}
 		$filter = ($curfilter) ? $this->CurrentFilter : "";
 		ew_AddFilter($filter, $where);
@@ -430,14 +554,6 @@ class ct_coal1 extends cTable {
 	// Delete
 	function Delete(&$rs, $where = "", $curfilter = TRUE) {
 		$conn = &$this->Connection();
-
-		// Cascade delete detail table 't_coal2'
-		if (!isset($GLOBALS["t_coal2"])) $GLOBALS["t_coal2"] = new ct_coal2();
-		$rscascade = $GLOBALS["t_coal2"]->LoadRs("`coal1_id` = " . ew_QuotedValue($rs['coal1_id'], EW_DATATYPE_NUMBER, "DB")); 
-		while ($rscascade && !$rscascade->EOF) {
-			$GLOBALS["t_coal2"]->Delete($rscascade->fields);
-			$rscascade->MoveNext();
-		}
 		$bDelete = $conn->Execute($this->DeleteSQL($rs, $where, $curfilter));
 		if ($bDelete && $this->AuditTrailOnDelete)
 			$this->WriteAuditTrailOnDelete($rs);
@@ -446,15 +562,15 @@ class ct_coal1 extends cTable {
 
 	// Key filter WHERE clause
 	function SqlKeyFilter() {
-		return "`coal1_id` = @coal1_id@";
+		return "`coal3_id` = @coal3_id@";
 	}
 
 	// Key filter
 	function KeyFilter() {
 		$sKeyFilter = $this->SqlKeyFilter();
-		if (!is_numeric($this->coal1_id->CurrentValue))
+		if (!is_numeric($this->coal3_id->CurrentValue))
 			$sKeyFilter = "0=1"; // Invalid key
-		$sKeyFilter = str_replace("@coal1_id@", ew_AdjustSql($this->coal1_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
+		$sKeyFilter = str_replace("@coal3_id@", ew_AdjustSql($this->coal3_id->CurrentValue, $this->DBID), $sKeyFilter); // Replace key value
 		return $sKeyFilter;
 	}
 
@@ -468,7 +584,7 @@ class ct_coal1 extends cTable {
 		if (@$_SESSION[$name] <> "") {
 			return $_SESSION[$name];
 		} else {
-			return "t_coal1list.php";
+			return "t_coal3list.php";
 		}
 	}
 
@@ -478,33 +594,33 @@ class ct_coal1 extends cTable {
 
 	// List URL
 	function GetListUrl() {
-		return "t_coal1list.php";
+		return "t_coal3list.php";
 	}
 
 	// View URL
 	function GetViewUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("t_coal1view.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("t_coal3view.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("t_coal1view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("t_coal3view.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
 	// Add URL
 	function GetAddUrl($parm = "") {
 		if ($parm <> "")
-			$url = "t_coal1add.php?" . $this->UrlParm($parm);
+			$url = "t_coal3add.php?" . $this->UrlParm($parm);
 		else
-			$url = "t_coal1add.php";
+			$url = "t_coal3add.php";
 		return $this->AddMasterUrl($url);
 	}
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("t_coal1edit.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("t_coal3edit.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("t_coal1edit.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("t_coal3edit.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -517,9 +633,9 @@ class ct_coal1 extends cTable {
 	// Copy URL
 	function GetCopyUrl($parm = "") {
 		if ($parm <> "")
-			$url = $this->KeyUrl("t_coal1add.php", $this->UrlParm($parm));
+			$url = $this->KeyUrl("t_coal3add.php", $this->UrlParm($parm));
 		else
-			$url = $this->KeyUrl("t_coal1add.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
+			$url = $this->KeyUrl("t_coal3add.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -531,17 +647,22 @@ class ct_coal1 extends cTable {
 
 	// Delete URL
 	function GetDeleteUrl() {
-		return $this->KeyUrl("t_coal1delete.php", $this->UrlParm());
+		return $this->KeyUrl("t_coal3delete.php", $this->UrlParm());
 	}
 
 	// Add master url
 	function AddMasterUrl($url) {
+		if ($this->getCurrentMasterTable() == "t_coal2" && strpos($url, EW_TABLE_SHOW_MASTER . "=") === FALSE) {
+			$url .= (strpos($url, "?") !== FALSE ? "&" : "?") . EW_TABLE_SHOW_MASTER . "=" . $this->getCurrentMasterTable();
+			$url .= "&fk_coal2_id=" . urlencode($this->coal2_id->CurrentValue);
+			$url .= "&fk_coal1_id=" . urlencode($this->coal1_id->CurrentValue);
+		}
 		return $url;
 	}
 
 	function KeyToJson() {
 		$json = "";
-		$json .= "coal1_id:" . ew_VarToJson($this->coal1_id->CurrentValue, "number", "'");
+		$json .= "coal3_id:" . ew_VarToJson($this->coal3_id->CurrentValue, "number", "'");
 		return "{" . $json . "}";
 	}
 
@@ -549,8 +670,8 @@ class ct_coal1 extends cTable {
 	function KeyUrl($url, $parm = "") {
 		$sUrl = $url . "?";
 		if ($parm <> "") $sUrl .= $parm . "&";
-		if (!is_null($this->coal1_id->CurrentValue)) {
-			$sUrl .= "coal1_id=" . urlencode($this->coal1_id->CurrentValue);
+		if (!is_null($this->coal3_id->CurrentValue)) {
+			$sUrl .= "coal3_id=" . urlencode($this->coal3_id->CurrentValue);
 		} else {
 			return "javascript:ew_Alert(ewLanguage.Phrase('InvalidRecord'));";
 		}
@@ -583,10 +704,10 @@ class ct_coal1 extends cTable {
 			$cnt = count($arKeys);
 		} elseif (!empty($_GET) || !empty($_POST)) {
 			$isPost = ew_IsHttpPost();
-			if ($isPost && isset($_POST["coal1_id"]))
-				$arKeys[] = ew_StripSlashes($_POST["coal1_id"]);
-			elseif (isset($_GET["coal1_id"]))
-				$arKeys[] = ew_StripSlashes($_GET["coal1_id"]);
+			if ($isPost && isset($_POST["coal3_id"]))
+				$arKeys[] = ew_StripSlashes($_POST["coal3_id"]);
+			elseif (isset($_GET["coal3_id"]))
+				$arKeys[] = ew_StripSlashes($_GET["coal3_id"]);
 			else
 				$arKeys = NULL; // Do not setup
 
@@ -611,7 +732,7 @@ class ct_coal1 extends cTable {
 		$sKeyFilter = "";
 		foreach ($arKeys as $key) {
 			if ($sKeyFilter <> "") $sKeyFilter .= " OR ";
-			$this->coal1_id->CurrentValue = $key;
+			$this->coal3_id->CurrentValue = $key;
 			$sKeyFilter .= "(" . $this->KeyFilter() . ")";
 		}
 		return $sKeyFilter;
@@ -632,9 +753,11 @@ class ct_coal1 extends cTable {
 
 	// Load row values from recordset
 	function LoadListRowValues(&$rs) {
+		$this->coal3_id->setDbValue($rs->fields('coal3_id'));
 		$this->coal1_id->setDbValue($rs->fields('coal1_id'));
-		$this->coal1_no->setDbValue($rs->fields('coal1_no'));
-		$this->coal1_nm->setDbValue($rs->fields('coal1_nm'));
+		$this->coal2_id->setDbValue($rs->fields('coal2_id'));
+		$this->coal3_no->setDbValue($rs->fields('coal3_no'));
+		$this->coal3_nm->setDbValue($rs->fields('coal3_nm'));
 	}
 
 	// Render list row values
@@ -645,36 +768,104 @@ class ct_coal1 extends cTable {
 		$this->Row_Rendering();
 
    // Common render codes
+		// coal3_id
 		// coal1_id
-		// coal1_no
-		// coal1_nm
-		// coal1_id
+		// coal2_id
+		// coal3_no
+		// coal3_nm
+		// coal3_id
 
-		$this->coal1_id->ViewValue = $this->coal1_id->CurrentValue;
+		$this->coal3_id->ViewValue = $this->coal3_id->CurrentValue;
+		$this->coal3_id->ViewCustomAttributes = "";
+
+		// coal1_id
+		if ($this->coal1_id->VirtualValue <> "") {
+			$this->coal1_id->ViewValue = $this->coal1_id->VirtualValue;
+		} else {
+		if (strval($this->coal1_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal1_id`" . ew_SearchString("=", $this->coal1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal1_id`, `coal1_no` AS `DispFld`, `coal1_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
+		$sWhereWrk = "";
+		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_no`', "dx2" => '`coal1_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal1_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal1_id->ViewValue = $this->coal1_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal1_id->ViewValue = $this->coal1_id->CurrentValue;
+			}
+		} else {
+			$this->coal1_id->ViewValue = NULL;
+		}
+		}
 		$this->coal1_id->ViewCustomAttributes = "";
 
-		// coal1_no
-		$this->coal1_no->ViewValue = $this->coal1_no->CurrentValue;
-		$this->coal1_no->ViewCustomAttributes = "";
+		// coal2_id
+		if ($this->coal2_id->VirtualValue <> "") {
+			$this->coal2_id->ViewValue = $this->coal2_id->VirtualValue;
+		} else {
+		if (strval($this->coal2_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+		$sWhereWrk = "";
+		$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
+			}
+		} else {
+			$this->coal2_id->ViewValue = NULL;
+		}
+		}
+		$this->coal2_id->ViewCustomAttributes = "";
 
-		// coal1_nm
-		$this->coal1_nm->ViewValue = $this->coal1_nm->CurrentValue;
-		$this->coal1_nm->ViewCustomAttributes = "";
+		// coal3_no
+		$this->coal3_no->ViewValue = $this->coal3_no->CurrentValue;
+		$this->coal3_no->ViewCustomAttributes = "";
+
+		// coal3_nm
+		$this->coal3_nm->ViewValue = $this->coal3_nm->CurrentValue;
+		$this->coal3_nm->ViewCustomAttributes = "";
+
+		// coal3_id
+		$this->coal3_id->LinkCustomAttributes = "";
+		$this->coal3_id->HrefValue = "";
+		$this->coal3_id->TooltipValue = "";
 
 		// coal1_id
 		$this->coal1_id->LinkCustomAttributes = "";
 		$this->coal1_id->HrefValue = "";
 		$this->coal1_id->TooltipValue = "";
 
-		// coal1_no
-		$this->coal1_no->LinkCustomAttributes = "";
-		$this->coal1_no->HrefValue = "";
-		$this->coal1_no->TooltipValue = "";
+		// coal2_id
+		$this->coal2_id->LinkCustomAttributes = "";
+		$this->coal2_id->HrefValue = "";
+		$this->coal2_id->TooltipValue = "";
 
-		// coal1_nm
-		$this->coal1_nm->LinkCustomAttributes = "";
-		$this->coal1_nm->HrefValue = "";
-		$this->coal1_nm->TooltipValue = "";
+		// coal3_no
+		$this->coal3_no->LinkCustomAttributes = "";
+		$this->coal3_no->HrefValue = "";
+		$this->coal3_no->TooltipValue = "";
+
+		// coal3_nm
+		$this->coal3_nm->LinkCustomAttributes = "";
+		$this->coal3_nm->HrefValue = "";
+		$this->coal3_nm->TooltipValue = "";
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -687,23 +878,91 @@ class ct_coal1 extends cTable {
 		// Call Row Rendering event
 		$this->Row_Rendering();
 
+		// coal3_id
+		$this->coal3_id->EditAttrs["class"] = "form-control";
+		$this->coal3_id->EditCustomAttributes = "";
+		$this->coal3_id->EditValue = $this->coal3_id->CurrentValue;
+		$this->coal3_id->ViewCustomAttributes = "";
+
 		// coal1_id
 		$this->coal1_id->EditAttrs["class"] = "form-control";
 		$this->coal1_id->EditCustomAttributes = "";
-		$this->coal1_id->EditValue = $this->coal1_id->CurrentValue;
+		if ($this->coal1_id->getSessionValue() <> "") {
+			$this->coal1_id->CurrentValue = $this->coal1_id->getSessionValue();
+		if ($this->coal1_id->VirtualValue <> "") {
+			$this->coal1_id->ViewValue = $this->coal1_id->VirtualValue;
+		} else {
+		if (strval($this->coal1_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal1_id`" . ew_SearchString("=", $this->coal1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal1_id`, `coal1_no` AS `DispFld`, `coal1_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
+		$sWhereWrk = "";
+		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_no`', "dx2" => '`coal1_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal1_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal1_id->ViewValue = $this->coal1_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal1_id->ViewValue = $this->coal1_id->CurrentValue;
+			}
+		} else {
+			$this->coal1_id->ViewValue = NULL;
+		}
+		}
 		$this->coal1_id->ViewCustomAttributes = "";
+		} else {
+		}
 
-		// coal1_no
-		$this->coal1_no->EditAttrs["class"] = "form-control";
-		$this->coal1_no->EditCustomAttributes = "";
-		$this->coal1_no->EditValue = $this->coal1_no->CurrentValue;
-		$this->coal1_no->PlaceHolder = ew_RemoveHtml($this->coal1_no->FldCaption());
+		// coal2_id
+		$this->coal2_id->EditAttrs["class"] = "form-control";
+		$this->coal2_id->EditCustomAttributes = "";
+		if ($this->coal2_id->getSessionValue() <> "") {
+			$this->coal2_id->CurrentValue = $this->coal2_id->getSessionValue();
+		if ($this->coal2_id->VirtualValue <> "") {
+			$this->coal2_id->ViewValue = $this->coal2_id->VirtualValue;
+		} else {
+		if (strval($this->coal2_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+		$sWhereWrk = "";
+		$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
+			}
+		} else {
+			$this->coal2_id->ViewValue = NULL;
+		}
+		}
+		$this->coal2_id->ViewCustomAttributes = "";
+		} else {
+		}
 
-		// coal1_nm
-		$this->coal1_nm->EditAttrs["class"] = "form-control";
-		$this->coal1_nm->EditCustomAttributes = "";
-		$this->coal1_nm->EditValue = $this->coal1_nm->CurrentValue;
-		$this->coal1_nm->PlaceHolder = ew_RemoveHtml($this->coal1_nm->FldCaption());
+		// coal3_no
+		$this->coal3_no->EditAttrs["class"] = "form-control";
+		$this->coal3_no->EditCustomAttributes = "";
+		$this->coal3_no->EditValue = $this->coal3_no->CurrentValue;
+		$this->coal3_no->PlaceHolder = ew_RemoveHtml($this->coal3_no->FldCaption());
+
+		// coal3_nm
+		$this->coal3_nm->EditAttrs["class"] = "form-control";
+		$this->coal3_nm->EditCustomAttributes = "";
+		$this->coal3_nm->EditValue = $this->coal3_nm->CurrentValue;
+		$this->coal3_nm->PlaceHolder = ew_RemoveHtml($this->coal3_nm->FldCaption());
 
 		// Call Row Rendered event
 		$this->Row_Rendered();
@@ -732,12 +991,16 @@ class ct_coal1 extends cTable {
 			if ($Doc->Horizontal) { // Horizontal format, write header
 				$Doc->BeginExportRow();
 				if ($ExportPageType == "view") {
-					if ($this->coal1_no->Exportable) $Doc->ExportCaption($this->coal1_no);
-					if ($this->coal1_nm->Exportable) $Doc->ExportCaption($this->coal1_nm);
-				} else {
 					if ($this->coal1_id->Exportable) $Doc->ExportCaption($this->coal1_id);
-					if ($this->coal1_no->Exportable) $Doc->ExportCaption($this->coal1_no);
-					if ($this->coal1_nm->Exportable) $Doc->ExportCaption($this->coal1_nm);
+					if ($this->coal2_id->Exportable) $Doc->ExportCaption($this->coal2_id);
+					if ($this->coal3_no->Exportable) $Doc->ExportCaption($this->coal3_no);
+					if ($this->coal3_nm->Exportable) $Doc->ExportCaption($this->coal3_nm);
+				} else {
+					if ($this->coal3_id->Exportable) $Doc->ExportCaption($this->coal3_id);
+					if ($this->coal1_id->Exportable) $Doc->ExportCaption($this->coal1_id);
+					if ($this->coal2_id->Exportable) $Doc->ExportCaption($this->coal2_id);
+					if ($this->coal3_no->Exportable) $Doc->ExportCaption($this->coal3_no);
+					if ($this->coal3_nm->Exportable) $Doc->ExportCaption($this->coal3_nm);
 				}
 				$Doc->EndExportRow();
 			}
@@ -769,12 +1032,16 @@ class ct_coal1 extends cTable {
 				if (!$Doc->ExportCustom) {
 					$Doc->BeginExportRow($RowCnt); // Allow CSS styles if enabled
 					if ($ExportPageType == "view") {
-						if ($this->coal1_no->Exportable) $Doc->ExportField($this->coal1_no);
-						if ($this->coal1_nm->Exportable) $Doc->ExportField($this->coal1_nm);
-					} else {
 						if ($this->coal1_id->Exportable) $Doc->ExportField($this->coal1_id);
-						if ($this->coal1_no->Exportable) $Doc->ExportField($this->coal1_no);
-						if ($this->coal1_nm->Exportable) $Doc->ExportField($this->coal1_nm);
+						if ($this->coal2_id->Exportable) $Doc->ExportField($this->coal2_id);
+						if ($this->coal3_no->Exportable) $Doc->ExportField($this->coal3_no);
+						if ($this->coal3_nm->Exportable) $Doc->ExportField($this->coal3_nm);
+					} else {
+						if ($this->coal3_id->Exportable) $Doc->ExportField($this->coal3_id);
+						if ($this->coal1_id->Exportable) $Doc->ExportField($this->coal1_id);
+						if ($this->coal2_id->Exportable) $Doc->ExportField($this->coal2_id);
+						if ($this->coal3_no->Exportable) $Doc->ExportField($this->coal3_no);
+						if ($this->coal3_nm->Exportable) $Doc->ExportField($this->coal3_nm);
 					}
 					$Doc->EndExportRow();
 				}
@@ -818,7 +1085,7 @@ class ct_coal1 extends cTable {
 
 	// Write Audit Trail start/end for grid update
 	function WriteAuditTrailDummy($typ) {
-		$table = 't_coal1';
+		$table = 't_coal3';
 		$usr = CurrentUserID();
 		ew_WriteAuditTrail("log", ew_StdCurrentDateTime(), ew_ScriptName(), $usr, $typ, $table, "", "", "", "");
 	}
@@ -827,12 +1094,12 @@ class ct_coal1 extends cTable {
 	function WriteAuditTrailOnAdd(&$rs) {
 		global $Language;
 		if (!$this->AuditTrailOnAdd) return;
-		$table = 't_coal1';
+		$table = 't_coal3';
 
 		// Get key value
 		$key = "";
 		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['coal1_id'];
+		$key .= $rs['coal3_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -861,12 +1128,12 @@ class ct_coal1 extends cTable {
 	function WriteAuditTrailOnEdit(&$rsold, &$rsnew) {
 		global $Language;
 		if (!$this->AuditTrailOnEdit) return;
-		$table = 't_coal1';
+		$table = 't_coal3';
 
 		// Get key value
 		$key = "";
 		if ($key <> "") $key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rsold['coal1_id'];
+		$key .= $rsold['coal3_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();
@@ -908,13 +1175,13 @@ class ct_coal1 extends cTable {
 	function WriteAuditTrailOnDelete(&$rs) {
 		global $Language;
 		if (!$this->AuditTrailOnDelete) return;
-		$table = 't_coal1';
+		$table = 't_coal3';
 
 		// Get key value
 		$key = "";
 		if ($key <> "")
 			$key .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-		$key .= $rs['coal1_id'];
+		$key .= $rs['coal3_id'];
 
 		// Write Audit Trail
 		$dt = ew_StdCurrentDateTime();

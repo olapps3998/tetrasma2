@@ -1612,14 +1612,6 @@ class ct_coal1_list extends ct_coal1 {
 		$item->ShowInDropDown = FALSE;
 		$item->ShowInButtonGroup = FALSE;
 
-		// "sequence"
-		$item = &$this->ListOptions->Add("sequence");
-		$item->CssStyle = "white-space: nowrap;";
-		$item->Visible = TRUE;
-		$item->OnLeft = TRUE; // Always on left
-		$item->ShowInDropDown = FALSE;
-		$item->ShowInButtonGroup = FALSE;
-
 		// Drop down button for ListOptions
 		$this->ListOptions->UseImageAndText = TRUE;
 		$this->ListOptions->UseDropDownButton = TRUE;
@@ -1672,10 +1664,6 @@ class ct_coal1_list extends ct_coal1 {
 				}
 			}
 		}
-
-		// "sequence"
-		$oListOpt = &$this->ListOptions->Items["sequence"];
-		$oListOpt->Body = ew_FormatSeqNo($this->RecCnt);
 
 		// "copy"
 		$oListOpt = &$this->ListOptions->Items["copy"];

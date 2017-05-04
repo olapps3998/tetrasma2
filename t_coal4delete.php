@@ -5,9 +5,9 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "t_coal2info.php" ?>
-<?php include_once "t_coal1info.php" ?>
+<?php include_once "t_coal4info.php" ?>
 <?php include_once "t_userinfo.php" ?>
+<?php include_once "t_coal3info.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -15,9 +15,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$t_coal2_delete = NULL; // Initialize page object first
+$t_coal4_delete = NULL; // Initialize page object first
 
-class ct_coal2_delete extends ct_coal2 {
+class ct_coal4_delete extends ct_coal4 {
 
 	// Page ID
 	var $PageID = 'delete';
@@ -26,10 +26,10 @@ class ct_coal2_delete extends ct_coal2 {
 	var $ProjectID = "{BD598998-6524-4166-9FBE-52F174C8EABD}";
 
 	// Table name
-	var $TableName = 't_coal2';
+	var $TableName = 't_coal4';
 
 	// Page object name
-	var $PageObjName = 't_coal2_delete';
+	var $PageObjName = 't_coal4_delete';
 
 	// Page name
 	function PageName() {
@@ -227,17 +227,17 @@ class ct_coal2_delete extends ct_coal2 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t_coal2)
-		if (!isset($GLOBALS["t_coal2"]) || get_class($GLOBALS["t_coal2"]) == "ct_coal2") {
-			$GLOBALS["t_coal2"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t_coal2"];
+		// Table object (t_coal4)
+		if (!isset($GLOBALS["t_coal4"]) || get_class($GLOBALS["t_coal4"]) == "ct_coal4") {
+			$GLOBALS["t_coal4"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t_coal4"];
 		}
-
-		// Table object (t_coal1)
-		if (!isset($GLOBALS['t_coal1'])) $GLOBALS['t_coal1'] = new ct_coal1();
 
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
+
+		// Table object (t_coal3)
+		if (!isset($GLOBALS['t_coal3'])) $GLOBALS['t_coal3'] = new ct_coal3();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -245,7 +245,7 @@ class ct_coal2_delete extends ct_coal2 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 't_coal2', TRUE);
+			define("EW_TABLE_NAME", 't_coal4', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -276,7 +276,7 @@ class ct_coal2_delete extends ct_coal2 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("t_coal2list.php"));
+				$this->Page_Terminate(ew_GetUrl("t_coal4list.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -287,8 +287,10 @@ class ct_coal2_delete extends ct_coal2 {
 		}
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->coal1_id->SetVisibility();
-		$this->coal2_no->SetVisibility();
-		$this->coal2_nm->SetVisibility();
+		$this->coal2_id->SetVisibility();
+		$this->coal3_id->SetVisibility();
+		$this->coal4_no->SetVisibility();
+		$this->coal4_nm->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -320,13 +322,13 @@ class ct_coal2_delete extends ct_coal2 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $t_coal2;
+		global $EW_EXPORT, $t_coal4;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($t_coal2);
+				$doc = new $class($t_coal4);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -375,10 +377,10 @@ class ct_coal2_delete extends ct_coal2 {
 		$this->RecKeys = $this->GetRecordKeys(); // Load record keys
 		$sFilter = $this->GetKeyFilter();
 		if ($sFilter == "")
-			$this->Page_Terminate("t_coal2list.php"); // Prevent SQL injection, return to list
+			$this->Page_Terminate("t_coal4list.php"); // Prevent SQL injection, return to list
 
 		// Set up filter (SQL WHHERE clause) and get return SQL
-		// SQL constructor in t_coal2 class, t_coal2info.php
+		// SQL constructor in t_coal4 class, t_coal4info.php
 
 		$this->CurrentFilter = $sFilter;
 
@@ -406,7 +408,7 @@ class ct_coal2_delete extends ct_coal2 {
 			if ($this->TotalRecs <= 0) { // No record found, exit
 				if ($this->Recordset)
 					$this->Recordset->Close();
-				$this->Page_Terminate("t_coal2list.php"); // Return to list
+				$this->Page_Terminate("t_coal4list.php"); // Return to list
 			}
 		}
 	}
@@ -466,25 +468,39 @@ class ct_coal2_delete extends ct_coal2 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->coal2_id->setDbValue($rs->fields('coal2_id'));
+		$this->coal4_id->setDbValue($rs->fields('coal4_id'));
 		$this->coal1_id->setDbValue($rs->fields('coal1_id'));
 		if (array_key_exists('EV__coal1_id', $rs->fields)) {
 			$this->coal1_id->VirtualValue = $rs->fields('EV__coal1_id'); // Set up virtual field value
 		} else {
 			$this->coal1_id->VirtualValue = ""; // Clear value
 		}
-		$this->coal2_no->setDbValue($rs->fields('coal2_no'));
-		$this->coal2_nm->setDbValue($rs->fields('coal2_nm'));
+		$this->coal2_id->setDbValue($rs->fields('coal2_id'));
+		if (array_key_exists('EV__coal2_id', $rs->fields)) {
+			$this->coal2_id->VirtualValue = $rs->fields('EV__coal2_id'); // Set up virtual field value
+		} else {
+			$this->coal2_id->VirtualValue = ""; // Clear value
+		}
+		$this->coal3_id->setDbValue($rs->fields('coal3_id'));
+		if (array_key_exists('EV__coal3_id', $rs->fields)) {
+			$this->coal3_id->VirtualValue = $rs->fields('EV__coal3_id'); // Set up virtual field value
+		} else {
+			$this->coal3_id->VirtualValue = ""; // Clear value
+		}
+		$this->coal4_no->setDbValue($rs->fields('coal4_no'));
+		$this->coal4_nm->setDbValue($rs->fields('coal4_nm'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->coal2_id->DbValue = $row['coal2_id'];
+		$this->coal4_id->DbValue = $row['coal4_id'];
 		$this->coal1_id->DbValue = $row['coal1_id'];
-		$this->coal2_no->DbValue = $row['coal2_no'];
-		$this->coal2_nm->DbValue = $row['coal2_nm'];
+		$this->coal2_id->DbValue = $row['coal2_id'];
+		$this->coal3_id->DbValue = $row['coal3_id'];
+		$this->coal4_no->DbValue = $row['coal4_no'];
+		$this->coal4_nm->DbValue = $row['coal4_nm'];
 	}
 
 	// Render row values based on field settings
@@ -497,16 +513,18 @@ class ct_coal2_delete extends ct_coal2 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// coal2_id
+		// coal4_id
 		// coal1_id
-		// coal2_no
-		// coal2_nm
+		// coal2_id
+		// coal3_id
+		// coal4_no
+		// coal4_nm
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// coal2_id
-		$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
-		$this->coal2_id->ViewCustomAttributes = "";
+		// coal4_id
+		$this->coal4_id->ViewValue = $this->coal4_id->CurrentValue;
+		$this->coal4_id->ViewCustomAttributes = "";
 
 		// coal1_id
 		if ($this->coal1_id->VirtualValue <> "") {
@@ -536,28 +554,94 @@ class ct_coal2_delete extends ct_coal2 {
 		}
 		$this->coal1_id->ViewCustomAttributes = "";
 
-		// coal2_no
-		$this->coal2_no->ViewValue = $this->coal2_no->CurrentValue;
-		$this->coal2_no->ViewCustomAttributes = "";
+		// coal2_id
+		if ($this->coal2_id->VirtualValue <> "") {
+			$this->coal2_id->ViewValue = $this->coal2_id->VirtualValue;
+		} else {
+		if (strval($this->coal2_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+		$sWhereWrk = "";
+		$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
+			}
+		} else {
+			$this->coal2_id->ViewValue = NULL;
+		}
+		}
+		$this->coal2_id->ViewCustomAttributes = "";
 
-		// coal2_nm
-		$this->coal2_nm->ViewValue = $this->coal2_nm->CurrentValue;
-		$this->coal2_nm->ViewCustomAttributes = "";
+		// coal3_id
+		if ($this->coal3_id->VirtualValue <> "") {
+			$this->coal3_id->ViewValue = $this->coal3_id->VirtualValue;
+		} else {
+		if (strval($this->coal3_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal3_id`" . ew_SearchString("=", $this->coal3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal3_id`, `coal3_no` AS `DispFld`, `coal3_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal3`";
+		$sWhereWrk = "";
+		$this->coal3_id->LookupFilters = array("dx1" => '`coal3_no`', "dx2" => '`coal3_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal3_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal3_id->ViewValue = $this->coal3_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal3_id->ViewValue = $this->coal3_id->CurrentValue;
+			}
+		} else {
+			$this->coal3_id->ViewValue = NULL;
+		}
+		}
+		$this->coal3_id->ViewCustomAttributes = "";
+
+		// coal4_no
+		$this->coal4_no->ViewValue = $this->coal4_no->CurrentValue;
+		$this->coal4_no->ViewCustomAttributes = "";
+
+		// coal4_nm
+		$this->coal4_nm->ViewValue = $this->coal4_nm->CurrentValue;
+		$this->coal4_nm->ViewCustomAttributes = "";
 
 			// coal1_id
 			$this->coal1_id->LinkCustomAttributes = "";
 			$this->coal1_id->HrefValue = "";
 			$this->coal1_id->TooltipValue = "";
 
-			// coal2_no
-			$this->coal2_no->LinkCustomAttributes = "";
-			$this->coal2_no->HrefValue = "";
-			$this->coal2_no->TooltipValue = "";
+			// coal2_id
+			$this->coal2_id->LinkCustomAttributes = "";
+			$this->coal2_id->HrefValue = "";
+			$this->coal2_id->TooltipValue = "";
 
-			// coal2_nm
-			$this->coal2_nm->LinkCustomAttributes = "";
-			$this->coal2_nm->HrefValue = "";
-			$this->coal2_nm->TooltipValue = "";
+			// coal3_id
+			$this->coal3_id->LinkCustomAttributes = "";
+			$this->coal3_id->HrefValue = "";
+			$this->coal3_id->TooltipValue = "";
+
+			// coal4_no
+			$this->coal4_no->LinkCustomAttributes = "";
+			$this->coal4_no->HrefValue = "";
+			$this->coal4_no->TooltipValue = "";
+
+			// coal4_nm
+			$this->coal4_nm->LinkCustomAttributes = "";
+			$this->coal4_nm->HrefValue = "";
+			$this->coal4_nm->TooltipValue = "";
 		}
 
 		// Call Row Rendered event
@@ -612,7 +696,7 @@ class ct_coal2_delete extends ct_coal2 {
 			foreach ($rsold as $row) {
 				$sThisKey = "";
 				if ($sThisKey <> "") $sThisKey .= $GLOBALS["EW_COMPOSITE_KEY_SEPARATOR"];
-				$sThisKey .= $row['coal2_id'];
+				$sThisKey .= $row['coal4_id'];
 				$conn->raiseErrorFn = $GLOBALS["EW_ERROR_FN"];
 				$DeleteRows = $this->Delete($row); // Delete
 				$conn->raiseErrorFn = '';
@@ -663,13 +747,29 @@ class ct_coal2_delete extends ct_coal2 {
 				$this->DbMasterFilter = "";
 				$this->DbDetailFilter = "";
 			}
-			if ($sMasterTblVar == "t_coal1") {
+			if ($sMasterTblVar == "t_coal3") {
 				$bValidMaster = TRUE;
 				if (@$_GET["fk_coal1_id"] <> "") {
-					$GLOBALS["t_coal1"]->coal1_id->setQueryStringValue($_GET["fk_coal1_id"]);
-					$this->coal1_id->setQueryStringValue($GLOBALS["t_coal1"]->coal1_id->QueryStringValue);
+					$GLOBALS["t_coal3"]->coal1_id->setQueryStringValue($_GET["fk_coal1_id"]);
+					$this->coal1_id->setQueryStringValue($GLOBALS["t_coal3"]->coal1_id->QueryStringValue);
 					$this->coal1_id->setSessionValue($this->coal1_id->QueryStringValue);
-					if (!is_numeric($GLOBALS["t_coal1"]->coal1_id->QueryStringValue)) $bValidMaster = FALSE;
+					if (!is_numeric($GLOBALS["t_coal3"]->coal1_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_GET["fk_coal2_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal2_id->setQueryStringValue($_GET["fk_coal2_id"]);
+					$this->coal2_id->setQueryStringValue($GLOBALS["t_coal3"]->coal2_id->QueryStringValue);
+					$this->coal2_id->setSessionValue($this->coal2_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal2_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_GET["fk_coal3_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal3_id->setQueryStringValue($_GET["fk_coal3_id"]);
+					$this->coal3_id->setQueryStringValue($GLOBALS["t_coal3"]->coal3_id->QueryStringValue);
+					$this->coal3_id->setSessionValue($this->coal3_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal3_id->QueryStringValue)) $bValidMaster = FALSE;
 				} else {
 					$bValidMaster = FALSE;
 				}
@@ -681,13 +781,29 @@ class ct_coal2_delete extends ct_coal2 {
 				$this->DbMasterFilter = "";
 				$this->DbDetailFilter = "";
 			}
-			if ($sMasterTblVar == "t_coal1") {
+			if ($sMasterTblVar == "t_coal3") {
 				$bValidMaster = TRUE;
 				if (@$_POST["fk_coal1_id"] <> "") {
-					$GLOBALS["t_coal1"]->coal1_id->setFormValue($_POST["fk_coal1_id"]);
-					$this->coal1_id->setFormValue($GLOBALS["t_coal1"]->coal1_id->FormValue);
+					$GLOBALS["t_coal3"]->coal1_id->setFormValue($_POST["fk_coal1_id"]);
+					$this->coal1_id->setFormValue($GLOBALS["t_coal3"]->coal1_id->FormValue);
 					$this->coal1_id->setSessionValue($this->coal1_id->FormValue);
-					if (!is_numeric($GLOBALS["t_coal1"]->coal1_id->FormValue)) $bValidMaster = FALSE;
+					if (!is_numeric($GLOBALS["t_coal3"]->coal1_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_POST["fk_coal2_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal2_id->setFormValue($_POST["fk_coal2_id"]);
+					$this->coal2_id->setFormValue($GLOBALS["t_coal3"]->coal2_id->FormValue);
+					$this->coal2_id->setSessionValue($this->coal2_id->FormValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal2_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_POST["fk_coal3_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal3_id->setFormValue($_POST["fk_coal3_id"]);
+					$this->coal3_id->setFormValue($GLOBALS["t_coal3"]->coal3_id->FormValue);
+					$this->coal3_id->setSessionValue($this->coal3_id->FormValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal3_id->FormValue)) $bValidMaster = FALSE;
 				} else {
 					$bValidMaster = FALSE;
 				}
@@ -703,8 +819,10 @@ class ct_coal2_delete extends ct_coal2 {
 			$this->setStartRecordNumber($this->StartRec);
 
 			// Clear previous master key from Session
-			if ($sMasterTblVar <> "t_coal1") {
+			if ($sMasterTblVar <> "t_coal3") {
 				if ($this->coal1_id->CurrentValue == "") $this->coal1_id->setSessionValue("");
+				if ($this->coal2_id->CurrentValue == "") $this->coal2_id->setSessionValue("");
+				if ($this->coal3_id->CurrentValue == "") $this->coal3_id->setSessionValue("");
 			}
 		}
 		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
@@ -716,7 +834,7 @@ class ct_coal2_delete extends ct_coal2 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_coal2list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_coal4list.php"), "", $this->TableVar, TRUE);
 		$PageId = "delete";
 		$Breadcrumb->Add("delete", $PageId, $url);
 	}
@@ -802,29 +920,29 @@ class ct_coal2_delete extends ct_coal2 {
 <?php
 
 // Create page object
-if (!isset($t_coal2_delete)) $t_coal2_delete = new ct_coal2_delete();
+if (!isset($t_coal4_delete)) $t_coal4_delete = new ct_coal4_delete();
 
 // Page init
-$t_coal2_delete->Page_Init();
+$t_coal4_delete->Page_Init();
 
 // Page main
-$t_coal2_delete->Page_Main();
+$t_coal4_delete->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$t_coal2_delete->Page_Render();
+$t_coal4_delete->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "delete";
-var CurrentForm = ft_coal2delete = new ew_Form("ft_coal2delete", "delete");
+var CurrentForm = ft_coal4delete = new ew_Form("ft_coal4delete", "delete");
 
 // Form_CustomValidate event
-ft_coal2delete.Form_CustomValidate = 
+ft_coal4delete.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -833,13 +951,15 @@ ft_coal2delete.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ft_coal2delete.ValidateRequired = true;
+ft_coal4delete.ValidateRequired = true;
 <?php } else { ?>
-ft_coal2delete.ValidateRequired = false; 
+ft_coal4delete.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ft_coal2delete.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal1_no","x_coal1_nm","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal1"};
+ft_coal4delete.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal1_no","x_coal1_nm","",""],"ParentFields":[],"ChildFields":["x_coal2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal1"};
+ft_coal4delete.Lists["x_coal2_id"] = {"LinkField":"x_coal2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal2_no","x_coal2_nm","",""],"ParentFields":[],"ChildFields":["x_coal3_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal2"};
+ft_coal4delete.Lists["x_coal3_id"] = {"LinkField":"x_coal3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal3_no","x_coal3_nm","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal3"};
 
 // Form object for search
 </script>
@@ -852,85 +972,107 @@ ft_coal2delete.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"Auto
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
-<?php $t_coal2_delete->ShowPageHeader(); ?>
+<?php $t_coal4_delete->ShowPageHeader(); ?>
 <?php
-$t_coal2_delete->ShowMessage();
+$t_coal4_delete->ShowMessage();
 ?>
-<form name="ft_coal2delete" id="ft_coal2delete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($t_coal2_delete->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_coal2_delete->Token ?>">
+<form name="ft_coal4delete" id="ft_coal4delete" class="form-inline ewForm ewDeleteForm" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($t_coal4_delete->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_coal4_delete->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="t_coal2">
+<input type="hidden" name="t" value="t_coal4">
 <input type="hidden" name="a_delete" id="a_delete" value="D">
-<?php foreach ($t_coal2_delete->RecKeys as $key) { ?>
+<?php foreach ($t_coal4_delete->RecKeys as $key) { ?>
 <?php $keyvalue = is_array($key) ? implode($EW_COMPOSITE_KEY_SEPARATOR, $key) : $key; ?>
 <input type="hidden" name="key_m[]" value="<?php echo ew_HtmlEncode($keyvalue) ?>">
 <?php } ?>
 <div class="ewGrid">
 <div class="<?php if (ew_IsResponsiveLayout()) { echo "table-responsive "; } ?>ewGridMiddlePanel">
 <table class="table ewTable">
-<?php echo $t_coal2->TableCustomInnerHtml ?>
+<?php echo $t_coal4->TableCustomInnerHtml ?>
 	<thead>
 	<tr class="ewTableHeader">
-<?php if ($t_coal2->coal1_id->Visible) { // coal1_id ?>
-		<th><span id="elh_t_coal2_coal1_id" class="t_coal2_coal1_id"><?php echo $t_coal2->coal1_id->FldCaption() ?></span></th>
+<?php if ($t_coal4->coal1_id->Visible) { // coal1_id ?>
+		<th><span id="elh_t_coal4_coal1_id" class="t_coal4_coal1_id"><?php echo $t_coal4->coal1_id->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($t_coal2->coal2_no->Visible) { // coal2_no ?>
-		<th><span id="elh_t_coal2_coal2_no" class="t_coal2_coal2_no"><?php echo $t_coal2->coal2_no->FldCaption() ?></span></th>
+<?php if ($t_coal4->coal2_id->Visible) { // coal2_id ?>
+		<th><span id="elh_t_coal4_coal2_id" class="t_coal4_coal2_id"><?php echo $t_coal4->coal2_id->FldCaption() ?></span></th>
 <?php } ?>
-<?php if ($t_coal2->coal2_nm->Visible) { // coal2_nm ?>
-		<th><span id="elh_t_coal2_coal2_nm" class="t_coal2_coal2_nm"><?php echo $t_coal2->coal2_nm->FldCaption() ?></span></th>
+<?php if ($t_coal4->coal3_id->Visible) { // coal3_id ?>
+		<th><span id="elh_t_coal4_coal3_id" class="t_coal4_coal3_id"><?php echo $t_coal4->coal3_id->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($t_coal4->coal4_no->Visible) { // coal4_no ?>
+		<th><span id="elh_t_coal4_coal4_no" class="t_coal4_coal4_no"><?php echo $t_coal4->coal4_no->FldCaption() ?></span></th>
+<?php } ?>
+<?php if ($t_coal4->coal4_nm->Visible) { // coal4_nm ?>
+		<th><span id="elh_t_coal4_coal4_nm" class="t_coal4_coal4_nm"><?php echo $t_coal4->coal4_nm->FldCaption() ?></span></th>
 <?php } ?>
 	</tr>
 	</thead>
 	<tbody>
 <?php
-$t_coal2_delete->RecCnt = 0;
+$t_coal4_delete->RecCnt = 0;
 $i = 0;
-while (!$t_coal2_delete->Recordset->EOF) {
-	$t_coal2_delete->RecCnt++;
-	$t_coal2_delete->RowCnt++;
+while (!$t_coal4_delete->Recordset->EOF) {
+	$t_coal4_delete->RecCnt++;
+	$t_coal4_delete->RowCnt++;
 
 	// Set row properties
-	$t_coal2->ResetAttrs();
-	$t_coal2->RowType = EW_ROWTYPE_VIEW; // View
+	$t_coal4->ResetAttrs();
+	$t_coal4->RowType = EW_ROWTYPE_VIEW; // View
 
 	// Get the field contents
-	$t_coal2_delete->LoadRowValues($t_coal2_delete->Recordset);
+	$t_coal4_delete->LoadRowValues($t_coal4_delete->Recordset);
 
 	// Render row
-	$t_coal2_delete->RenderRow();
+	$t_coal4_delete->RenderRow();
 ?>
-	<tr<?php echo $t_coal2->RowAttributes() ?>>
-<?php if ($t_coal2->coal1_id->Visible) { // coal1_id ?>
-		<td<?php echo $t_coal2->coal1_id->CellAttributes() ?>>
-<span id="el<?php echo $t_coal2_delete->RowCnt ?>_t_coal2_coal1_id" class="t_coal2_coal1_id">
-<span<?php echo $t_coal2->coal1_id->ViewAttributes() ?>>
-<?php echo $t_coal2->coal1_id->ListViewValue() ?></span>
+	<tr<?php echo $t_coal4->RowAttributes() ?>>
+<?php if ($t_coal4->coal1_id->Visible) { // coal1_id ?>
+		<td<?php echo $t_coal4->coal1_id->CellAttributes() ?>>
+<span id="el<?php echo $t_coal4_delete->RowCnt ?>_t_coal4_coal1_id" class="t_coal4_coal1_id">
+<span<?php echo $t_coal4->coal1_id->ViewAttributes() ?>>
+<?php echo $t_coal4->coal1_id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($t_coal2->coal2_no->Visible) { // coal2_no ?>
-		<td<?php echo $t_coal2->coal2_no->CellAttributes() ?>>
-<span id="el<?php echo $t_coal2_delete->RowCnt ?>_t_coal2_coal2_no" class="t_coal2_coal2_no">
-<span<?php echo $t_coal2->coal2_no->ViewAttributes() ?>>
-<?php echo $t_coal2->coal2_no->ListViewValue() ?></span>
+<?php if ($t_coal4->coal2_id->Visible) { // coal2_id ?>
+		<td<?php echo $t_coal4->coal2_id->CellAttributes() ?>>
+<span id="el<?php echo $t_coal4_delete->RowCnt ?>_t_coal4_coal2_id" class="t_coal4_coal2_id">
+<span<?php echo $t_coal4->coal2_id->ViewAttributes() ?>>
+<?php echo $t_coal4->coal2_id->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
-<?php if ($t_coal2->coal2_nm->Visible) { // coal2_nm ?>
-		<td<?php echo $t_coal2->coal2_nm->CellAttributes() ?>>
-<span id="el<?php echo $t_coal2_delete->RowCnt ?>_t_coal2_coal2_nm" class="t_coal2_coal2_nm">
-<span<?php echo $t_coal2->coal2_nm->ViewAttributes() ?>>
-<?php echo $t_coal2->coal2_nm->ListViewValue() ?></span>
+<?php if ($t_coal4->coal3_id->Visible) { // coal3_id ?>
+		<td<?php echo $t_coal4->coal3_id->CellAttributes() ?>>
+<span id="el<?php echo $t_coal4_delete->RowCnt ?>_t_coal4_coal3_id" class="t_coal4_coal3_id">
+<span<?php echo $t_coal4->coal3_id->ViewAttributes() ?>>
+<?php echo $t_coal4->coal3_id->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_coal4->coal4_no->Visible) { // coal4_no ?>
+		<td<?php echo $t_coal4->coal4_no->CellAttributes() ?>>
+<span id="el<?php echo $t_coal4_delete->RowCnt ?>_t_coal4_coal4_no" class="t_coal4_coal4_no">
+<span<?php echo $t_coal4->coal4_no->ViewAttributes() ?>>
+<?php echo $t_coal4->coal4_no->ListViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($t_coal4->coal4_nm->Visible) { // coal4_nm ?>
+		<td<?php echo $t_coal4->coal4_nm->CellAttributes() ?>>
+<span id="el<?php echo $t_coal4_delete->RowCnt ?>_t_coal4_coal4_nm" class="t_coal4_coal4_nm">
+<span<?php echo $t_coal4->coal4_nm->ViewAttributes() ?>>
+<?php echo $t_coal4->coal4_nm->ListViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
 	</tr>
 <?php
-	$t_coal2_delete->Recordset->MoveNext();
+	$t_coal4_delete->Recordset->MoveNext();
 }
-$t_coal2_delete->Recordset->Close();
+$t_coal4_delete->Recordset->Close();
 ?>
 </tbody>
 </table>
@@ -938,14 +1080,14 @@ $t_coal2_delete->Recordset->Close();
 </div>
 <div>
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("DeleteBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_coal2_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_coal4_delete->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 </div>
 </form>
 <script type="text/javascript">
-ft_coal2delete.Init();
+ft_coal4delete.Init();
 </script>
 <?php
-$t_coal2_delete->ShowPageFooter();
+$t_coal4_delete->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -957,5 +1099,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$t_coal2_delete->Page_Terminate();
+$t_coal4_delete->Page_Terminate();
 ?>

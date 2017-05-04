@@ -5,10 +5,9 @@ ob_start(); // Turn on output buffering
 <?php include_once "ewcfg13.php" ?>
 <?php include_once ((EW_USE_ADODB) ? "adodb5/adodb.inc.php" : "ewmysql13.php") ?>
 <?php include_once "phpfn13.php" ?>
-<?php include_once "t_coal2info.php" ?>
-<?php include_once "t_coal1info.php" ?>
+<?php include_once "t_coal4info.php" ?>
 <?php include_once "t_userinfo.php" ?>
-<?php include_once "t_coal3gridcls.php" ?>
+<?php include_once "t_coal3info.php" ?>
 <?php include_once "userfn13.php" ?>
 <?php
 
@@ -16,9 +15,9 @@ ob_start(); // Turn on output buffering
 // Page class
 //
 
-$t_coal2_edit = NULL; // Initialize page object first
+$t_coal4_edit = NULL; // Initialize page object first
 
-class ct_coal2_edit extends ct_coal2 {
+class ct_coal4_edit extends ct_coal4 {
 
 	// Page ID
 	var $PageID = 'edit';
@@ -27,10 +26,10 @@ class ct_coal2_edit extends ct_coal2 {
 	var $ProjectID = "{BD598998-6524-4166-9FBE-52F174C8EABD}";
 
 	// Table name
-	var $TableName = 't_coal2';
+	var $TableName = 't_coal4';
 
 	// Page object name
-	var $PageObjName = 't_coal2_edit';
+	var $PageObjName = 't_coal4_edit';
 
 	// Page name
 	function PageName() {
@@ -228,17 +227,17 @@ class ct_coal2_edit extends ct_coal2 {
 		// Parent constuctor
 		parent::__construct();
 
-		// Table object (t_coal2)
-		if (!isset($GLOBALS["t_coal2"]) || get_class($GLOBALS["t_coal2"]) == "ct_coal2") {
-			$GLOBALS["t_coal2"] = &$this;
-			$GLOBALS["Table"] = &$GLOBALS["t_coal2"];
+		// Table object (t_coal4)
+		if (!isset($GLOBALS["t_coal4"]) || get_class($GLOBALS["t_coal4"]) == "ct_coal4") {
+			$GLOBALS["t_coal4"] = &$this;
+			$GLOBALS["Table"] = &$GLOBALS["t_coal4"];
 		}
-
-		// Table object (t_coal1)
-		if (!isset($GLOBALS['t_coal1'])) $GLOBALS['t_coal1'] = new ct_coal1();
 
 		// Table object (t_user)
 		if (!isset($GLOBALS['t_user'])) $GLOBALS['t_user'] = new ct_user();
+
+		// Table object (t_coal3)
+		if (!isset($GLOBALS['t_coal3'])) $GLOBALS['t_coal3'] = new ct_coal3();
 
 		// Page ID
 		if (!defined("EW_PAGE_ID"))
@@ -246,7 +245,7 @@ class ct_coal2_edit extends ct_coal2 {
 
 		// Table name (for backward compatibility)
 		if (!defined("EW_TABLE_NAME"))
-			define("EW_TABLE_NAME", 't_coal2', TRUE);
+			define("EW_TABLE_NAME", 't_coal4', TRUE);
 
 		// Start timer
 		if (!isset($GLOBALS["gTimer"])) $GLOBALS["gTimer"] = new cTimer();
@@ -277,7 +276,7 @@ class ct_coal2_edit extends ct_coal2 {
 			$Security->SaveLastUrl();
 			$this->setFailureMessage(ew_DeniedMsg()); // Set no permission
 			if ($Security->CanList())
-				$this->Page_Terminate(ew_GetUrl("t_coal2list.php"));
+				$this->Page_Terminate(ew_GetUrl("t_coal4list.php"));
 			else
 				$this->Page_Terminate(ew_GetUrl("login.php"));
 		}
@@ -291,8 +290,10 @@ class ct_coal2_edit extends ct_coal2 {
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
 		$this->coal1_id->SetVisibility();
-		$this->coal2_no->SetVisibility();
-		$this->coal2_nm->SetVisibility();
+		$this->coal2_id->SetVisibility();
+		$this->coal3_id->SetVisibility();
+		$this->coal4_no->SetVisibility();
+		$this->coal4_nm->SetVisibility();
 
 		// Global Page Loading event (in userfn*.php)
 		Page_Loading();
@@ -309,14 +310,6 @@ class ct_coal2_edit extends ct_coal2 {
 
 		// Process auto fill
 		if (@$_POST["ajax"] == "autofill") {
-
-			// Process auto fill for detail table 't_coal3'
-			if (@$_POST["grid"] == "ft_coal3grid") {
-				if (!isset($GLOBALS["t_coal3_grid"])) $GLOBALS["t_coal3_grid"] = new ct_coal3_grid;
-				$GLOBALS["t_coal3_grid"]->Page_Init();
-				$this->Page_Terminate();
-				exit();
-			}
 			$results = $this->GetAutoFill(@$_POST["name"], @$_POST["q"]);
 			if ($results) {
 
@@ -346,13 +339,13 @@ class ct_coal2_edit extends ct_coal2 {
 		Page_Unloaded();
 
 		// Export
-		global $EW_EXPORT, $t_coal2;
+		global $EW_EXPORT, $t_coal4;
 		if ($this->CustomExport <> "" && $this->CustomExport == $this->Export && array_key_exists($this->CustomExport, $EW_EXPORT)) {
 				$sContent = ob_get_contents();
 			if ($gsExportFile == "") $gsExportFile = $this->TableVar;
 			$class = $EW_EXPORT[$this->CustomExport];
 			if (class_exists($class)) {
-				$doc = new $class($t_coal2);
+				$doc = new $class($t_coal4);
 				$doc->Text = $sContent;
 				if ($this->Export == "email")
 					echo $this->ExportEmail($doc->Text);
@@ -415,9 +408,9 @@ class ct_coal2_edit extends ct_coal2 {
 		$bMatchRecord = FALSE;
 
 		// Load key from QueryString
-		if (@$_GET["coal2_id"] <> "") {
-			$this->coal2_id->setQueryStringValue($_GET["coal2_id"]);
-			$this->RecKey["coal2_id"] = $this->coal2_id->QueryStringValue;
+		if (@$_GET["coal4_id"] <> "") {
+			$this->coal4_id->setQueryStringValue($_GET["coal4_id"]);
+			$this->RecKey["coal4_id"] = $this->coal4_id->QueryStringValue;
 		} else {
 			$bLoadCurrentRecord = TRUE;
 		}
@@ -432,7 +425,7 @@ class ct_coal2_edit extends ct_coal2 {
 		if ($this->TotalRecs <= 0) { // No record found
 			if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 				$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-			$this->Page_Terminate("t_coal2list.php"); // Return to list page
+			$this->Page_Terminate("t_coal4list.php"); // Return to list page
 		} elseif ($bLoadCurrentRecord) { // Load current record position
 			$this->SetUpStartRec(); // Set up start record position
 
@@ -443,7 +436,7 @@ class ct_coal2_edit extends ct_coal2 {
 			}
 		} else { // Match key values
 			while (!$this->Recordset->EOF) {
-				if (strval($this->coal2_id->CurrentValue) == strval($this->Recordset->fields('coal2_id'))) {
+				if (strval($this->coal4_id->CurrentValue) == strval($this->Recordset->fields('coal4_id'))) {
 					$this->setStartRecordNumber($this->StartRec); // Save record position
 					$bMatchRecord = TRUE;
 					break;
@@ -458,9 +451,6 @@ class ct_coal2_edit extends ct_coal2 {
 		if (@$_POST["a_edit"] <> "") {
 			$this->CurrentAction = $_POST["a_edit"]; // Get action code
 			$this->LoadFormValues(); // Get form values
-
-			// Set up detail parameters
-			$this->SetUpDetailParms();
 		} else {
 			$this->CurrentAction = "I"; // Default action is display
 		}
@@ -479,20 +469,14 @@ class ct_coal2_edit extends ct_coal2 {
 				if (!$bMatchRecord) {
 					if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "")
 						$this->setFailureMessage($Language->Phrase("NoRecord")); // Set no record message
-					$this->Page_Terminate("t_coal2list.php"); // Return to list page
+					$this->Page_Terminate("t_coal4list.php"); // Return to list page
 				} else {
 					$this->LoadRowValues($this->Recordset); // Load row values
 				}
-
-				// Set up detail parameters
-				$this->SetUpDetailParms();
 				break;
 			Case "U": // Update
-				if ($this->getCurrentDetailTable() <> "") // Master/detail edit
-					$sReturnUrl = $this->GetViewUrl(EW_TABLE_SHOW_DETAIL . "=" . $this->getCurrentDetailTable()); // Master/Detail view page
-				else
-					$sReturnUrl = $this->getReturnUrl();
-				if (ew_GetPageName($sReturnUrl) == "t_coal2list.php")
+				$sReturnUrl = $this->getReturnUrl();
+				if (ew_GetPageName($sReturnUrl) == "t_coal4list.php")
 					$sReturnUrl = $this->AddMasterUrl($sReturnUrl); // List page, return to list page with correct master key if necessary
 				$this->SendEmail = TRUE; // Send email on update success
 				if ($this->EditRow()) { // Update record based on key
@@ -504,9 +488,6 @@ class ct_coal2_edit extends ct_coal2 {
 				} else {
 					$this->EventCancelled = TRUE; // Event cancelled
 					$this->RestoreFormValues(); // Restore form values if update failed
-
-					// Set up detail parameters
-					$this->SetUpDetailParms();
 				}
 		}
 
@@ -570,24 +551,32 @@ class ct_coal2_edit extends ct_coal2 {
 		if (!$this->coal1_id->FldIsDetailKey) {
 			$this->coal1_id->setFormValue($objForm->GetValue("x_coal1_id"));
 		}
-		if (!$this->coal2_no->FldIsDetailKey) {
-			$this->coal2_no->setFormValue($objForm->GetValue("x_coal2_no"));
-		}
-		if (!$this->coal2_nm->FldIsDetailKey) {
-			$this->coal2_nm->setFormValue($objForm->GetValue("x_coal2_nm"));
-		}
-		if (!$this->coal2_id->FldIsDetailKey)
+		if (!$this->coal2_id->FldIsDetailKey) {
 			$this->coal2_id->setFormValue($objForm->GetValue("x_coal2_id"));
+		}
+		if (!$this->coal3_id->FldIsDetailKey) {
+			$this->coal3_id->setFormValue($objForm->GetValue("x_coal3_id"));
+		}
+		if (!$this->coal4_no->FldIsDetailKey) {
+			$this->coal4_no->setFormValue($objForm->GetValue("x_coal4_no"));
+		}
+		if (!$this->coal4_nm->FldIsDetailKey) {
+			$this->coal4_nm->setFormValue($objForm->GetValue("x_coal4_nm"));
+		}
+		if (!$this->coal4_id->FldIsDetailKey)
+			$this->coal4_id->setFormValue($objForm->GetValue("x_coal4_id"));
 	}
 
 	// Restore form values
 	function RestoreFormValues() {
 		global $objForm;
 		$this->LoadRow();
-		$this->coal2_id->CurrentValue = $this->coal2_id->FormValue;
+		$this->coal4_id->CurrentValue = $this->coal4_id->FormValue;
 		$this->coal1_id->CurrentValue = $this->coal1_id->FormValue;
-		$this->coal2_no->CurrentValue = $this->coal2_no->FormValue;
-		$this->coal2_nm->CurrentValue = $this->coal2_nm->FormValue;
+		$this->coal2_id->CurrentValue = $this->coal2_id->FormValue;
+		$this->coal3_id->CurrentValue = $this->coal3_id->FormValue;
+		$this->coal4_no->CurrentValue = $this->coal4_no->FormValue;
+		$this->coal4_nm->CurrentValue = $this->coal4_nm->FormValue;
 	}
 
 	// Load recordset
@@ -645,25 +634,39 @@ class ct_coal2_edit extends ct_coal2 {
 		// Call Row Selected event
 		$row = &$rs->fields;
 		$this->Row_Selected($row);
-		$this->coal2_id->setDbValue($rs->fields('coal2_id'));
+		$this->coal4_id->setDbValue($rs->fields('coal4_id'));
 		$this->coal1_id->setDbValue($rs->fields('coal1_id'));
 		if (array_key_exists('EV__coal1_id', $rs->fields)) {
 			$this->coal1_id->VirtualValue = $rs->fields('EV__coal1_id'); // Set up virtual field value
 		} else {
 			$this->coal1_id->VirtualValue = ""; // Clear value
 		}
-		$this->coal2_no->setDbValue($rs->fields('coal2_no'));
-		$this->coal2_nm->setDbValue($rs->fields('coal2_nm'));
+		$this->coal2_id->setDbValue($rs->fields('coal2_id'));
+		if (array_key_exists('EV__coal2_id', $rs->fields)) {
+			$this->coal2_id->VirtualValue = $rs->fields('EV__coal2_id'); // Set up virtual field value
+		} else {
+			$this->coal2_id->VirtualValue = ""; // Clear value
+		}
+		$this->coal3_id->setDbValue($rs->fields('coal3_id'));
+		if (array_key_exists('EV__coal3_id', $rs->fields)) {
+			$this->coal3_id->VirtualValue = $rs->fields('EV__coal3_id'); // Set up virtual field value
+		} else {
+			$this->coal3_id->VirtualValue = ""; // Clear value
+		}
+		$this->coal4_no->setDbValue($rs->fields('coal4_no'));
+		$this->coal4_nm->setDbValue($rs->fields('coal4_nm'));
 	}
 
 	// Load DbValue from recordset
 	function LoadDbValues(&$rs) {
 		if (!$rs || !is_array($rs) && $rs->EOF) return;
 		$row = is_array($rs) ? $rs : $rs->fields;
-		$this->coal2_id->DbValue = $row['coal2_id'];
+		$this->coal4_id->DbValue = $row['coal4_id'];
 		$this->coal1_id->DbValue = $row['coal1_id'];
-		$this->coal2_no->DbValue = $row['coal2_no'];
-		$this->coal2_nm->DbValue = $row['coal2_nm'];
+		$this->coal2_id->DbValue = $row['coal2_id'];
+		$this->coal3_id->DbValue = $row['coal3_id'];
+		$this->coal4_no->DbValue = $row['coal4_no'];
+		$this->coal4_nm->DbValue = $row['coal4_nm'];
 	}
 
 	// Render row values based on field settings
@@ -676,16 +679,18 @@ class ct_coal2_edit extends ct_coal2 {
 		$this->Row_Rendering();
 
 		// Common render codes for all row types
-		// coal2_id
+		// coal4_id
 		// coal1_id
-		// coal2_no
-		// coal2_nm
+		// coal2_id
+		// coal3_id
+		// coal4_no
+		// coal4_nm
 
 		if ($this->RowType == EW_ROWTYPE_VIEW) { // View row
 
-		// coal2_id
-		$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
-		$this->coal2_id->ViewCustomAttributes = "";
+		// coal4_id
+		$this->coal4_id->ViewValue = $this->coal4_id->CurrentValue;
+		$this->coal4_id->ViewCustomAttributes = "";
 
 		// coal1_id
 		if ($this->coal1_id->VirtualValue <> "") {
@@ -715,28 +720,94 @@ class ct_coal2_edit extends ct_coal2 {
 		}
 		$this->coal1_id->ViewCustomAttributes = "";
 
-		// coal2_no
-		$this->coal2_no->ViewValue = $this->coal2_no->CurrentValue;
-		$this->coal2_no->ViewCustomAttributes = "";
+		// coal2_id
+		if ($this->coal2_id->VirtualValue <> "") {
+			$this->coal2_id->ViewValue = $this->coal2_id->VirtualValue;
+		} else {
+		if (strval($this->coal2_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+		$sWhereWrk = "";
+		$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
+			}
+		} else {
+			$this->coal2_id->ViewValue = NULL;
+		}
+		}
+		$this->coal2_id->ViewCustomAttributes = "";
 
-		// coal2_nm
-		$this->coal2_nm->ViewValue = $this->coal2_nm->CurrentValue;
-		$this->coal2_nm->ViewCustomAttributes = "";
+		// coal3_id
+		if ($this->coal3_id->VirtualValue <> "") {
+			$this->coal3_id->ViewValue = $this->coal3_id->VirtualValue;
+		} else {
+		if (strval($this->coal3_id->CurrentValue) <> "") {
+			$sFilterWrk = "`coal3_id`" . ew_SearchString("=", $this->coal3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+		$sSqlWrk = "SELECT `coal3_id`, `coal3_no` AS `DispFld`, `coal3_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal3`";
+		$sWhereWrk = "";
+		$this->coal3_id->LookupFilters = array("dx1" => '`coal3_no`', "dx2" => '`coal3_nm`');
+		ew_AddFilter($sWhereWrk, $sFilterWrk);
+		$this->Lookup_Selecting($this->coal3_id, $sWhereWrk); // Call Lookup selecting
+		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
+				$this->coal3_id->ViewValue = $this->coal3_id->DisplayValue($arwrk);
+				$rswrk->Close();
+			} else {
+				$this->coal3_id->ViewValue = $this->coal3_id->CurrentValue;
+			}
+		} else {
+			$this->coal3_id->ViewValue = NULL;
+		}
+		}
+		$this->coal3_id->ViewCustomAttributes = "";
+
+		// coal4_no
+		$this->coal4_no->ViewValue = $this->coal4_no->CurrentValue;
+		$this->coal4_no->ViewCustomAttributes = "";
+
+		// coal4_nm
+		$this->coal4_nm->ViewValue = $this->coal4_nm->CurrentValue;
+		$this->coal4_nm->ViewCustomAttributes = "";
 
 			// coal1_id
 			$this->coal1_id->LinkCustomAttributes = "";
 			$this->coal1_id->HrefValue = "";
 			$this->coal1_id->TooltipValue = "";
 
-			// coal2_no
-			$this->coal2_no->LinkCustomAttributes = "";
-			$this->coal2_no->HrefValue = "";
-			$this->coal2_no->TooltipValue = "";
+			// coal2_id
+			$this->coal2_id->LinkCustomAttributes = "";
+			$this->coal2_id->HrefValue = "";
+			$this->coal2_id->TooltipValue = "";
 
-			// coal2_nm
-			$this->coal2_nm->LinkCustomAttributes = "";
-			$this->coal2_nm->HrefValue = "";
-			$this->coal2_nm->TooltipValue = "";
+			// coal3_id
+			$this->coal3_id->LinkCustomAttributes = "";
+			$this->coal3_id->HrefValue = "";
+			$this->coal3_id->TooltipValue = "";
+
+			// coal4_no
+			$this->coal4_no->LinkCustomAttributes = "";
+			$this->coal4_no->HrefValue = "";
+			$this->coal4_no->TooltipValue = "";
+
+			// coal4_nm
+			$this->coal4_nm->LinkCustomAttributes = "";
+			$this->coal4_nm->HrefValue = "";
+			$this->coal4_nm->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
 
 			// coal1_id
@@ -795,17 +866,129 @@ class ct_coal2_edit extends ct_coal2 {
 			$this->coal1_id->EditValue = $arwrk;
 			}
 
-			// coal2_no
-			$this->coal2_no->EditAttrs["class"] = "form-control";
-			$this->coal2_no->EditCustomAttributes = "";
-			$this->coal2_no->EditValue = ew_HtmlEncode($this->coal2_no->CurrentValue);
-			$this->coal2_no->PlaceHolder = ew_RemoveHtml($this->coal2_no->FldCaption());
+			// coal2_id
+			$this->coal2_id->EditCustomAttributes = "";
+			if ($this->coal2_id->getSessionValue() <> "") {
+				$this->coal2_id->CurrentValue = $this->coal2_id->getSessionValue();
+			if ($this->coal2_id->VirtualValue <> "") {
+				$this->coal2_id->ViewValue = $this->coal2_id->VirtualValue;
+			} else {
+			if (strval($this->coal2_id->CurrentValue) <> "") {
+				$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+			$sWhereWrk = "";
+			$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$arwrk[2] = $rswrk->fields('Disp2Fld');
+					$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->coal2_id->ViewValue = $this->coal2_id->CurrentValue;
+				}
+			} else {
+				$this->coal2_id->ViewValue = NULL;
+			}
+			}
+			$this->coal2_id->ViewCustomAttributes = "";
+			} else {
+			if (trim(strval($this->coal2_id->CurrentValue)) == "") {
+				$sFilterWrk = "0=1";
+			} else {
+				$sFilterWrk = "`coal2_id`" . ew_SearchString("=", $this->coal2_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			}
+			$sSqlWrk = "SELECT `coal2_id`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, `coal1_id` AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `t_coal2`";
+			$sWhereWrk = "";
+			$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+				$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
+				$this->coal2_id->ViewValue = $this->coal2_id->DisplayValue($arwrk);
+			} else {
+				$this->coal2_id->ViewValue = $Language->Phrase("PleaseSelect");
+			}
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			$this->coal2_id->EditValue = $arwrk;
+			}
 
-			// coal2_nm
-			$this->coal2_nm->EditAttrs["class"] = "form-control";
-			$this->coal2_nm->EditCustomAttributes = "";
-			$this->coal2_nm->EditValue = ew_HtmlEncode($this->coal2_nm->CurrentValue);
-			$this->coal2_nm->PlaceHolder = ew_RemoveHtml($this->coal2_nm->FldCaption());
+			// coal3_id
+			$this->coal3_id->EditCustomAttributes = "";
+			if ($this->coal3_id->getSessionValue() <> "") {
+				$this->coal3_id->CurrentValue = $this->coal3_id->getSessionValue();
+			if ($this->coal3_id->VirtualValue <> "") {
+				$this->coal3_id->ViewValue = $this->coal3_id->VirtualValue;
+			} else {
+			if (strval($this->coal3_id->CurrentValue) <> "") {
+				$sFilterWrk = "`coal3_id`" . ew_SearchString("=", $this->coal3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			$sSqlWrk = "SELECT `coal3_id`, `coal3_no` AS `DispFld`, `coal3_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal3`";
+			$sWhereWrk = "";
+			$this->coal3_id->LookupFilters = array("dx1" => '`coal3_no`', "dx2" => '`coal3_nm`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->coal3_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+				$rswrk = Conn()->Execute($sSqlWrk);
+				if ($rswrk && !$rswrk->EOF) { // Lookup values found
+					$arwrk = array();
+					$arwrk[1] = $rswrk->fields('DispFld');
+					$arwrk[2] = $rswrk->fields('Disp2Fld');
+					$this->coal3_id->ViewValue = $this->coal3_id->DisplayValue($arwrk);
+					$rswrk->Close();
+				} else {
+					$this->coal3_id->ViewValue = $this->coal3_id->CurrentValue;
+				}
+			} else {
+				$this->coal3_id->ViewValue = NULL;
+			}
+			}
+			$this->coal3_id->ViewCustomAttributes = "";
+			} else {
+			if (trim(strval($this->coal3_id->CurrentValue)) == "") {
+				$sFilterWrk = "0=1";
+			} else {
+				$sFilterWrk = "`coal3_id`" . ew_SearchString("=", $this->coal3_id->CurrentValue, EW_DATATYPE_NUMBER, "");
+			}
+			$sSqlWrk = "SELECT `coal3_id`, `coal3_no` AS `DispFld`, `coal3_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld`, `coal2_id` AS `SelectFilterFld`, '' AS `SelectFilterFld2`, '' AS `SelectFilterFld3`, '' AS `SelectFilterFld4` FROM `t_coal3`";
+			$sWhereWrk = "";
+			$this->coal3_id->LookupFilters = array("dx1" => '`coal3_no`', "dx2" => '`coal3_nm`');
+			ew_AddFilter($sWhereWrk, $sFilterWrk);
+			$this->Lookup_Selecting($this->coal3_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			$rswrk = Conn()->Execute($sSqlWrk);
+			if ($rswrk && !$rswrk->EOF) { // Lookup values found
+				$arwrk = array();
+				$arwrk[1] = ew_HtmlEncode($rswrk->fields('DispFld'));
+				$arwrk[2] = ew_HtmlEncode($rswrk->fields('Disp2Fld'));
+				$this->coal3_id->ViewValue = $this->coal3_id->DisplayValue($arwrk);
+			} else {
+				$this->coal3_id->ViewValue = $Language->Phrase("PleaseSelect");
+			}
+			$arwrk = ($rswrk) ? $rswrk->GetRows() : array();
+			if ($rswrk) $rswrk->Close();
+			$this->coal3_id->EditValue = $arwrk;
+			}
+
+			// coal4_no
+			$this->coal4_no->EditAttrs["class"] = "form-control";
+			$this->coal4_no->EditCustomAttributes = "";
+			$this->coal4_no->EditValue = ew_HtmlEncode($this->coal4_no->CurrentValue);
+			$this->coal4_no->PlaceHolder = ew_RemoveHtml($this->coal4_no->FldCaption());
+
+			// coal4_nm
+			$this->coal4_nm->EditAttrs["class"] = "form-control";
+			$this->coal4_nm->EditCustomAttributes = "";
+			$this->coal4_nm->EditValue = ew_HtmlEncode($this->coal4_nm->CurrentValue);
+			$this->coal4_nm->PlaceHolder = ew_RemoveHtml($this->coal4_nm->FldCaption());
 
 			// Edit refer script
 			// coal1_id
@@ -813,13 +996,21 @@ class ct_coal2_edit extends ct_coal2 {
 			$this->coal1_id->LinkCustomAttributes = "";
 			$this->coal1_id->HrefValue = "";
 
-			// coal2_no
-			$this->coal2_no->LinkCustomAttributes = "";
-			$this->coal2_no->HrefValue = "";
+			// coal2_id
+			$this->coal2_id->LinkCustomAttributes = "";
+			$this->coal2_id->HrefValue = "";
 
-			// coal2_nm
-			$this->coal2_nm->LinkCustomAttributes = "";
-			$this->coal2_nm->HrefValue = "";
+			// coal3_id
+			$this->coal3_id->LinkCustomAttributes = "";
+			$this->coal3_id->HrefValue = "";
+
+			// coal4_no
+			$this->coal4_no->LinkCustomAttributes = "";
+			$this->coal4_no->HrefValue = "";
+
+			// coal4_nm
+			$this->coal4_nm->LinkCustomAttributes = "";
+			$this->coal4_nm->HrefValue = "";
 		}
 		if ($this->RowType == EW_ROWTYPE_ADD ||
 			$this->RowType == EW_ROWTYPE_EDIT ||
@@ -845,18 +1036,17 @@ class ct_coal2_edit extends ct_coal2 {
 		if (!$this->coal1_id->FldIsDetailKey && !is_null($this->coal1_id->FormValue) && $this->coal1_id->FormValue == "") {
 			ew_AddMessage($gsFormError, str_replace("%s", $this->coal1_id->FldCaption(), $this->coal1_id->ReqErrMsg));
 		}
-		if (!$this->coal2_no->FldIsDetailKey && !is_null($this->coal2_no->FormValue) && $this->coal2_no->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->coal2_no->FldCaption(), $this->coal2_no->ReqErrMsg));
+		if (!$this->coal2_id->FldIsDetailKey && !is_null($this->coal2_id->FormValue) && $this->coal2_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->coal2_id->FldCaption(), $this->coal2_id->ReqErrMsg));
 		}
-		if (!$this->coal2_nm->FldIsDetailKey && !is_null($this->coal2_nm->FormValue) && $this->coal2_nm->FormValue == "") {
-			ew_AddMessage($gsFormError, str_replace("%s", $this->coal2_nm->FldCaption(), $this->coal2_nm->ReqErrMsg));
+		if (!$this->coal3_id->FldIsDetailKey && !is_null($this->coal3_id->FormValue) && $this->coal3_id->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->coal3_id->FldCaption(), $this->coal3_id->ReqErrMsg));
 		}
-
-		// Validate detail grid
-		$DetailTblVar = explode(",", $this->getCurrentDetailTable());
-		if (in_array("t_coal3", $DetailTblVar) && $GLOBALS["t_coal3"]->DetailEdit) {
-			if (!isset($GLOBALS["t_coal3_grid"])) $GLOBALS["t_coal3_grid"] = new ct_coal3_grid(); // get detail page object
-			$GLOBALS["t_coal3_grid"]->ValidateGridForm();
+		if (!$this->coal4_no->FldIsDetailKey && !is_null($this->coal4_no->FormValue) && $this->coal4_no->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->coal4_no->FldCaption(), $this->coal4_no->ReqErrMsg));
+		}
+		if (!$this->coal4_nm->FldIsDetailKey && !is_null($this->coal4_nm->FormValue) && $this->coal4_nm->FormValue == "") {
+			ew_AddMessage($gsFormError, str_replace("%s", $this->coal4_nm->FldCaption(), $this->coal4_nm->ReqErrMsg));
 		}
 
 		// Return validate result
@@ -889,45 +1079,25 @@ class ct_coal2_edit extends ct_coal2 {
 			$EditRow = FALSE; // Update Failed
 		} else {
 
-			// Begin transaction
-			if ($this->getCurrentDetailTable() <> "")
-				$conn->BeginTrans();
-
 			// Save old values
 			$rsold = &$rs->fields;
 			$this->LoadDbValues($rsold);
 			$rsnew = array();
 
 			// coal1_id
-			$this->coal1_id->SetDbValueDef($rsnew, $this->coal1_id->CurrentValue, 0, $this->coal1_id->ReadOnly);
+			$this->coal1_id->SetDbValueDef($rsnew, $this->coal1_id->CurrentValue, NULL, $this->coal1_id->ReadOnly);
 
-			// coal2_no
-			$this->coal2_no->SetDbValueDef($rsnew, $this->coal2_no->CurrentValue, "", $this->coal2_no->ReadOnly);
+			// coal2_id
+			$this->coal2_id->SetDbValueDef($rsnew, $this->coal2_id->CurrentValue, NULL, $this->coal2_id->ReadOnly);
 
-			// coal2_nm
-			$this->coal2_nm->SetDbValueDef($rsnew, $this->coal2_nm->CurrentValue, "", $this->coal2_nm->ReadOnly);
+			// coal3_id
+			$this->coal3_id->SetDbValueDef($rsnew, $this->coal3_id->CurrentValue, 0, $this->coal3_id->ReadOnly);
 
-			// Check referential integrity for master table 't_coal1'
-			$bValidMasterRecord = TRUE;
-			$sMasterFilter = $this->SqlMasterFilter_t_coal1();
-			$KeyValue = isset($rsnew['coal1_id']) ? $rsnew['coal1_id'] : $rsold['coal1_id'];
-			if (strval($KeyValue) <> "") {
-				$sMasterFilter = str_replace("@coal1_id@", ew_AdjustSql($KeyValue), $sMasterFilter);
-			} else {
-				$bValidMasterRecord = FALSE;
-			}
-			if ($bValidMasterRecord) {
-				if (!isset($GLOBALS["t_coal1"])) $GLOBALS["t_coal1"] = new ct_coal1();
-				$rsmaster = $GLOBALS["t_coal1"]->LoadRs($sMasterFilter);
-				$bValidMasterRecord = ($rsmaster && !$rsmaster->EOF);
-				$rsmaster->Close();
-			}
-			if (!$bValidMasterRecord) {
-				$sRelatedRecordMsg = str_replace("%t", "t_coal1", $Language->Phrase("RelatedRecordRequired"));
-				$this->setFailureMessage($sRelatedRecordMsg);
-				$rs->Close();
-				return FALSE;
-			}
+			// coal4_no
+			$this->coal4_no->SetDbValueDef($rsnew, $this->coal4_no->CurrentValue, "", $this->coal4_no->ReadOnly);
+
+			// coal4_nm
+			$this->coal4_nm->SetDbValueDef($rsnew, $this->coal4_nm->CurrentValue, "", $this->coal4_nm->ReadOnly);
 
 			// Call Row Updating event
 			$bUpdateRow = $this->Row_Updating($rsold, $rsnew);
@@ -939,26 +1109,6 @@ class ct_coal2_edit extends ct_coal2 {
 					$EditRow = TRUE; // No field to update
 				$conn->raiseErrorFn = '';
 				if ($EditRow) {
-				}
-
-				// Update detail records
-				$DetailTblVar = explode(",", $this->getCurrentDetailTable());
-				if ($EditRow) {
-					if (in_array("t_coal3", $DetailTblVar) && $GLOBALS["t_coal3"]->DetailEdit) {
-						if (!isset($GLOBALS["t_coal3_grid"])) $GLOBALS["t_coal3_grid"] = new ct_coal3_grid(); // Get detail page object
-						$Security->LoadCurrentUserLevel($this->ProjectID . "t_coal3"); // Load user level of detail table
-						$EditRow = $GLOBALS["t_coal3_grid"]->GridUpdate();
-						$Security->LoadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
-					}
-				}
-
-				// Commit/Rollback transaction
-				if ($this->getCurrentDetailTable() <> "") {
-					if ($EditRow) {
-						$conn->CommitTrans(); // Commit transaction
-					} else {
-						$conn->RollbackTrans(); // Rollback transaction
-					}
 				}
 			} else {
 				if ($this->getSuccessMessage() <> "" || $this->getFailureMessage() <> "") {
@@ -993,13 +1143,29 @@ class ct_coal2_edit extends ct_coal2 {
 				$this->DbMasterFilter = "";
 				$this->DbDetailFilter = "";
 			}
-			if ($sMasterTblVar == "t_coal1") {
+			if ($sMasterTblVar == "t_coal3") {
 				$bValidMaster = TRUE;
 				if (@$_GET["fk_coal1_id"] <> "") {
-					$GLOBALS["t_coal1"]->coal1_id->setQueryStringValue($_GET["fk_coal1_id"]);
-					$this->coal1_id->setQueryStringValue($GLOBALS["t_coal1"]->coal1_id->QueryStringValue);
+					$GLOBALS["t_coal3"]->coal1_id->setQueryStringValue($_GET["fk_coal1_id"]);
+					$this->coal1_id->setQueryStringValue($GLOBALS["t_coal3"]->coal1_id->QueryStringValue);
 					$this->coal1_id->setSessionValue($this->coal1_id->QueryStringValue);
-					if (!is_numeric($GLOBALS["t_coal1"]->coal1_id->QueryStringValue)) $bValidMaster = FALSE;
+					if (!is_numeric($GLOBALS["t_coal3"]->coal1_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_GET["fk_coal2_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal2_id->setQueryStringValue($_GET["fk_coal2_id"]);
+					$this->coal2_id->setQueryStringValue($GLOBALS["t_coal3"]->coal2_id->QueryStringValue);
+					$this->coal2_id->setSessionValue($this->coal2_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal2_id->QueryStringValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_GET["fk_coal3_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal3_id->setQueryStringValue($_GET["fk_coal3_id"]);
+					$this->coal3_id->setQueryStringValue($GLOBALS["t_coal3"]->coal3_id->QueryStringValue);
+					$this->coal3_id->setSessionValue($this->coal3_id->QueryStringValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal3_id->QueryStringValue)) $bValidMaster = FALSE;
 				} else {
 					$bValidMaster = FALSE;
 				}
@@ -1011,13 +1177,29 @@ class ct_coal2_edit extends ct_coal2 {
 				$this->DbMasterFilter = "";
 				$this->DbDetailFilter = "";
 			}
-			if ($sMasterTblVar == "t_coal1") {
+			if ($sMasterTblVar == "t_coal3") {
 				$bValidMaster = TRUE;
 				if (@$_POST["fk_coal1_id"] <> "") {
-					$GLOBALS["t_coal1"]->coal1_id->setFormValue($_POST["fk_coal1_id"]);
-					$this->coal1_id->setFormValue($GLOBALS["t_coal1"]->coal1_id->FormValue);
+					$GLOBALS["t_coal3"]->coal1_id->setFormValue($_POST["fk_coal1_id"]);
+					$this->coal1_id->setFormValue($GLOBALS["t_coal3"]->coal1_id->FormValue);
 					$this->coal1_id->setSessionValue($this->coal1_id->FormValue);
-					if (!is_numeric($GLOBALS["t_coal1"]->coal1_id->FormValue)) $bValidMaster = FALSE;
+					if (!is_numeric($GLOBALS["t_coal3"]->coal1_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_POST["fk_coal2_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal2_id->setFormValue($_POST["fk_coal2_id"]);
+					$this->coal2_id->setFormValue($GLOBALS["t_coal3"]->coal2_id->FormValue);
+					$this->coal2_id->setSessionValue($this->coal2_id->FormValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal2_id->FormValue)) $bValidMaster = FALSE;
+				} else {
+					$bValidMaster = FALSE;
+				}
+				if (@$_POST["fk_coal3_id"] <> "") {
+					$GLOBALS["t_coal3"]->coal3_id->setFormValue($_POST["fk_coal3_id"]);
+					$this->coal3_id->setFormValue($GLOBALS["t_coal3"]->coal3_id->FormValue);
+					$this->coal3_id->setSessionValue($this->coal3_id->FormValue);
+					if (!is_numeric($GLOBALS["t_coal3"]->coal3_id->FormValue)) $bValidMaster = FALSE;
 				} else {
 					$bValidMaster = FALSE;
 				}
@@ -1034,45 +1216,14 @@ class ct_coal2_edit extends ct_coal2 {
 			$this->setStartRecordNumber($this->StartRec);
 
 			// Clear previous master key from Session
-			if ($sMasterTblVar <> "t_coal1") {
+			if ($sMasterTblVar <> "t_coal3") {
 				if ($this->coal1_id->CurrentValue == "") $this->coal1_id->setSessionValue("");
+				if ($this->coal2_id->CurrentValue == "") $this->coal2_id->setSessionValue("");
+				if ($this->coal3_id->CurrentValue == "") $this->coal3_id->setSessionValue("");
 			}
 		}
 		$this->DbMasterFilter = $this->GetMasterFilter(); // Get master filter
 		$this->DbDetailFilter = $this->GetDetailFilter(); // Get detail filter
-	}
-
-	// Set up detail parms based on QueryString
-	function SetUpDetailParms() {
-
-		// Get the keys for master table
-		if (isset($_GET[EW_TABLE_SHOW_DETAIL])) {
-			$sDetailTblVar = $_GET[EW_TABLE_SHOW_DETAIL];
-			$this->setCurrentDetailTable($sDetailTblVar);
-		} else {
-			$sDetailTblVar = $this->getCurrentDetailTable();
-		}
-		if ($sDetailTblVar <> "") {
-			$DetailTblVar = explode(",", $sDetailTblVar);
-			if (in_array("t_coal3", $DetailTblVar)) {
-				if (!isset($GLOBALS["t_coal3_grid"]))
-					$GLOBALS["t_coal3_grid"] = new ct_coal3_grid;
-				if ($GLOBALS["t_coal3_grid"]->DetailEdit) {
-					$GLOBALS["t_coal3_grid"]->CurrentMode = "edit";
-					$GLOBALS["t_coal3_grid"]->CurrentAction = "gridedit";
-
-					// Save current master table to detail table
-					$GLOBALS["t_coal3_grid"]->setCurrentMasterTable($this->TableVar);
-					$GLOBALS["t_coal3_grid"]->setStartRecordNumber(1);
-					$GLOBALS["t_coal3_grid"]->coal2_id->FldIsDetailKey = TRUE;
-					$GLOBALS["t_coal3_grid"]->coal2_id->CurrentValue = $this->coal2_id->CurrentValue;
-					$GLOBALS["t_coal3_grid"]->coal2_id->setSessionValue($GLOBALS["t_coal3_grid"]->coal2_id->CurrentValue);
-					$GLOBALS["t_coal3_grid"]->coal1_id->FldIsDetailKey = TRUE;
-					$GLOBALS["t_coal3_grid"]->coal1_id->CurrentValue = $this->coal1_id->CurrentValue;
-					$GLOBALS["t_coal3_grid"]->coal1_id->setSessionValue($GLOBALS["t_coal3_grid"]->coal1_id->CurrentValue);
-				}
-			}
-		}
 	}
 
 	// Set up Breadcrumb
@@ -1080,7 +1231,7 @@ class ct_coal2_edit extends ct_coal2 {
 		global $Breadcrumb, $Language;
 		$Breadcrumb = new cBreadcrumb();
 		$url = substr(ew_CurrentUrl(), strrpos(ew_CurrentUrl(), "/")+1);
-		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_coal2list.php"), "", $this->TableVar, TRUE);
+		$Breadcrumb->Add("list", $this->TableVar, $this->AddMasterUrl("t_coal4list.php"), "", $this->TableVar, TRUE);
 		$PageId = "edit";
 		$Breadcrumb->Add("edit", $PageId, $url);
 	}
@@ -1098,6 +1249,30 @@ class ct_coal2_edit extends ct_coal2 {
 			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`coal1_id` = {filter_value}', "t0" => "3", "fn0" => "");
 			$sSqlWrk = "";
 			$this->Lookup_Selecting($this->coal1_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
+		case "x_coal2_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `coal2_id` AS `LinkFld`, `coal2_no` AS `DispFld`, `coal2_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal2`";
+			$sWhereWrk = "{filter}";
+			$this->coal2_id->LookupFilters = array("dx1" => '`coal2_no`', "dx2" => '`coal2_nm`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`coal2_id` = {filter_value}', "t0" => "3", "fn0" => "", "f1" => '`coal1_id` IN ({filter_value})', "t1" => "3", "fn1" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->coal2_id, $sWhereWrk); // Call Lookup selecting
+			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
+			if ($sSqlWrk <> "")
+				$fld->LookupFilters["s"] .= $sSqlWrk;
+			break;
+		case "x_coal3_id":
+			$sSqlWrk = "";
+			$sSqlWrk = "SELECT `coal3_id` AS `LinkFld`, `coal3_no` AS `DispFld`, `coal3_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal3`";
+			$sWhereWrk = "{filter}";
+			$this->coal3_id->LookupFilters = array("dx1" => '`coal3_no`', "dx2" => '`coal3_nm`');
+			$fld->LookupFilters += array("s" => $sSqlWrk, "d" => "", "f0" => '`coal3_id` = {filter_value}', "t0" => "3", "fn0" => "", "f1" => '`coal2_id` IN ({filter_value})', "t1" => "3", "fn1" => "");
+			$sSqlWrk = "";
+			$this->Lookup_Selecting($this->coal3_id, $sWhereWrk); // Call Lookup selecting
 			if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
 			if ($sSqlWrk <> "")
 				$fld->LookupFilters["s"] .= $sSqlWrk;
@@ -1185,29 +1360,29 @@ class ct_coal2_edit extends ct_coal2 {
 <?php
 
 // Create page object
-if (!isset($t_coal2_edit)) $t_coal2_edit = new ct_coal2_edit();
+if (!isset($t_coal4_edit)) $t_coal4_edit = new ct_coal4_edit();
 
 // Page init
-$t_coal2_edit->Page_Init();
+$t_coal4_edit->Page_Init();
 
 // Page main
-$t_coal2_edit->Page_Main();
+$t_coal4_edit->Page_Main();
 
 // Global Page Rendering event (in userfn*.php)
 Page_Rendering();
 
 // Page Rendering event
-$t_coal2_edit->Page_Render();
+$t_coal4_edit->Page_Render();
 ?>
 <?php include_once "header.php" ?>
 <script type="text/javascript">
 
 // Form object
 var CurrentPageID = EW_PAGE_ID = "edit";
-var CurrentForm = ft_coal2edit = new ew_Form("ft_coal2edit", "edit");
+var CurrentForm = ft_coal4edit = new ew_Form("ft_coal4edit", "edit");
 
 // Validate form
-ft_coal2edit.Validate = function() {
+ft_coal4edit.Validate = function() {
 	if (!this.ValidateRequired)
 		return true; // Ignore validation
 	var $ = jQuery, fobj = this.GetForm(), $fobj = $(fobj);
@@ -1223,13 +1398,19 @@ ft_coal2edit.Validate = function() {
 		$fobj.data("rowindex", infix);
 			elm = this.GetElements("x" + infix + "_coal1_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal2->coal1_id->FldCaption(), $t_coal2->coal1_id->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_coal2_no");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal4->coal1_id->FldCaption(), $t_coal4->coal1_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_coal2_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal2->coal2_no->FldCaption(), $t_coal2->coal2_no->ReqErrMsg)) ?>");
-			elm = this.GetElements("x" + infix + "_coal2_nm");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal4->coal2_id->FldCaption(), $t_coal4->coal2_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_coal3_id");
 			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
-				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal2->coal2_nm->FldCaption(), $t_coal2->coal2_nm->ReqErrMsg)) ?>");
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal4->coal3_id->FldCaption(), $t_coal4->coal3_id->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_coal4_no");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal4->coal4_no->FldCaption(), $t_coal4->coal4_no->ReqErrMsg)) ?>");
+			elm = this.GetElements("x" + infix + "_coal4_nm");
+			if (elm && !ew_IsHidden(elm) && !ew_HasValue(elm))
+				return this.OnError(elm, "<?php echo ew_JsEncode2(str_replace("%s", $t_coal4->coal4_nm->FldCaption(), $t_coal4->coal4_nm->ReqErrMsg)) ?>");
 
 			// Fire Form_CustomValidate event
 			if (!this.Form_CustomValidate(fobj))
@@ -1248,7 +1429,7 @@ ft_coal2edit.Validate = function() {
 }
 
 // Form_CustomValidate event
-ft_coal2edit.Form_CustomValidate = 
+ft_coal4edit.Form_CustomValidate = 
  function(fobj) { // DO NOT CHANGE THIS LINE!
 
  	// Your custom validation code here, return false if invalid. 
@@ -1257,13 +1438,15 @@ ft_coal2edit.Form_CustomValidate =
 
 // Use JavaScript validation or not
 <?php if (EW_CLIENT_VALIDATE) { ?>
-ft_coal2edit.ValidateRequired = true;
+ft_coal4edit.ValidateRequired = true;
 <?php } else { ?>
-ft_coal2edit.ValidateRequired = false; 
+ft_coal4edit.ValidateRequired = false; 
 <?php } ?>
 
 // Dynamic selection lists
-ft_coal2edit.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal1_no","x_coal1_nm","",""],"ParentFields":[],"ChildFields":[],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal1"};
+ft_coal4edit.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal1_no","x_coal1_nm","",""],"ParentFields":[],"ChildFields":["x_coal2_id"],"FilterFields":[],"Options":[],"Template":"","LinkTable":"t_coal1"};
+ft_coal4edit.Lists["x_coal2_id"] = {"LinkField":"x_coal2_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal2_no","x_coal2_nm","",""],"ParentFields":["x_coal1_id"],"ChildFields":["x_coal3_id"],"FilterFields":["x_coal1_id"],"Options":[],"Template":"","LinkTable":"t_coal2"};
+ft_coal4edit.Lists["x_coal3_id"] = {"LinkField":"x_coal3_id","Ajax":true,"AutoFill":false,"DisplayFields":["x_coal3_no","x_coal3_nm","",""],"ParentFields":["x_coal2_id"],"ChildFields":[],"FilterFields":["x_coal2_id"],"Options":[],"Template":"","LinkTable":"t_coal3"};
 
 // Form object for search
 </script>
@@ -1271,184 +1454,226 @@ ft_coal2edit.Lists["x_coal1_id"] = {"LinkField":"x_coal1_id","Ajax":true,"AutoFi
 
 // Write your client script here, no need to add script tags.
 </script>
-<?php if (!$t_coal2_edit->IsModal) { ?>
+<?php if (!$t_coal4_edit->IsModal) { ?>
 <div class="ewToolbar">
 <?php $Breadcrumb->Render(); ?>
 <?php echo $Language->SelectionForm(); ?>
 <div class="clearfix"></div>
 </div>
 <?php } ?>
-<?php $t_coal2_edit->ShowPageHeader(); ?>
+<?php $t_coal4_edit->ShowPageHeader(); ?>
 <?php
-$t_coal2_edit->ShowMessage();
+$t_coal4_edit->ShowMessage();
 ?>
-<?php if (!$t_coal2_edit->IsModal) { ?>
+<?php if (!$t_coal4_edit->IsModal) { ?>
 <form name="ewPagerForm" class="form-horizontal ewForm ewPagerForm" action="<?php echo ew_CurrentPage() ?>">
-<?php if (!isset($t_coal2_edit->Pager)) $t_coal2_edit->Pager = new cPrevNextPager($t_coal2_edit->StartRec, $t_coal2_edit->DisplayRecs, $t_coal2_edit->TotalRecs) ?>
-<?php if ($t_coal2_edit->Pager->RecordCount > 0 && $t_coal2_edit->Pager->Visible) { ?>
+<?php if (!isset($t_coal4_edit->Pager)) $t_coal4_edit->Pager = new cPrevNextPager($t_coal4_edit->StartRec, $t_coal4_edit->DisplayRecs, $t_coal4_edit->TotalRecs) ?>
+<?php if ($t_coal4_edit->Pager->RecordCount > 0 && $t_coal4_edit->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_coal2_edit->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_coal2_edit->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_coal2_edit->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_coal4_edit->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_coal2_edit->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_coal2_edit->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_coal2_edit->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_coal4_edit->Pager->PageCount ?></span>
 </div>
 <?php } ?>
 <div class="clearfix"></div>
 </form>
 <?php } ?>
-<form name="ft_coal2edit" id="ft_coal2edit" class="<?php echo $t_coal2_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
-<?php if ($t_coal2_edit->CheckToken) { ?>
-<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_coal2_edit->Token ?>">
+<form name="ft_coal4edit" id="ft_coal4edit" class="<?php echo $t_coal4_edit->FormClassName ?>" action="<?php echo ew_CurrentPage() ?>" method="post">
+<?php if ($t_coal4_edit->CheckToken) { ?>
+<input type="hidden" name="<?php echo EW_TOKEN_NAME ?>" value="<?php echo $t_coal4_edit->Token ?>">
 <?php } ?>
-<input type="hidden" name="t" value="t_coal2">
+<input type="hidden" name="t" value="t_coal4">
 <input type="hidden" name="a_edit" id="a_edit" value="U">
-<?php if ($t_coal2_edit->IsModal) { ?>
+<?php if ($t_coal4_edit->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
-<?php if ($t_coal2->getCurrentMasterTable() == "t_coal1") { ?>
-<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="t_coal1">
-<input type="hidden" name="fk_coal1_id" value="<?php echo $t_coal2->coal1_id->getSessionValue() ?>">
+<?php if ($t_coal4->getCurrentMasterTable() == "t_coal3") { ?>
+<input type="hidden" name="<?php echo EW_TABLE_SHOW_MASTER ?>" value="t_coal3">
+<input type="hidden" name="fk_coal1_id" value="<?php echo $t_coal4->coal1_id->getSessionValue() ?>">
+<input type="hidden" name="fk_coal2_id" value="<?php echo $t_coal4->coal2_id->getSessionValue() ?>">
+<input type="hidden" name="fk_coal3_id" value="<?php echo $t_coal4->coal3_id->getSessionValue() ?>">
 <?php } ?>
 <div>
-<?php if ($t_coal2->coal1_id->Visible) { // coal1_id ?>
+<?php if ($t_coal4->coal1_id->Visible) { // coal1_id ?>
 	<div id="r_coal1_id" class="form-group">
-		<label id="elh_t_coal2_coal1_id" for="x_coal1_id" class="col-sm-2 control-label ewLabel"><?php echo $t_coal2->coal1_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_coal2->coal1_id->CellAttributes() ?>>
-<?php if ($t_coal2->coal1_id->getSessionValue() <> "") { ?>
-<span id="el_t_coal2_coal1_id">
-<span<?php echo $t_coal2->coal1_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_coal2->coal1_id->ViewValue ?></p></span>
+		<label id="elh_t_coal4_coal1_id" for="x_coal1_id" class="col-sm-2 control-label ewLabel"><?php echo $t_coal4->coal1_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_coal4->coal1_id->CellAttributes() ?>>
+<?php if ($t_coal4->coal1_id->getSessionValue() <> "") { ?>
+<span id="el_t_coal4_coal1_id">
+<span<?php echo $t_coal4->coal1_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_coal4->coal1_id->ViewValue ?></p></span>
 </span>
-<input type="hidden" id="x_coal1_id" name="x_coal1_id" value="<?php echo ew_HtmlEncode($t_coal2->coal1_id->CurrentValue) ?>">
+<input type="hidden" id="x_coal1_id" name="x_coal1_id" value="<?php echo ew_HtmlEncode($t_coal4->coal1_id->CurrentValue) ?>">
 <?php } else { ?>
-<span id="el_t_coal2_coal1_id">
+<span id="el_t_coal4_coal1_id">
+<?php $t_coal4->coal1_id->EditAttrs["onchange"] = "ew_UpdateOpt.call(this); " . @$t_coal4->coal1_id->EditAttrs["onchange"]; ?>
 <span class="ewLookupList">
-	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_coal1_id"><?php echo (strval($t_coal2->coal1_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_coal2->coal1_id->ViewValue); ?></span>
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_coal1_id"><?php echo (strval($t_coal4->coal1_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_coal4->coal1_id->ViewValue); ?></span>
 </span>
-<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_coal2->coal1_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_coal1_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
-<input type="hidden" data-table="t_coal2" data-field="x_coal1_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_coal2->coal1_id->DisplayValueSeparatorAttribute() ?>" name="x_coal1_id" id="x_coal1_id" value="<?php echo $t_coal2->coal1_id->CurrentValue ?>"<?php echo $t_coal2->coal1_id->EditAttributes() ?>>
-<input type="hidden" name="s_x_coal1_id" id="s_x_coal1_id" value="<?php echo $t_coal2->coal1_id->LookupFilterQuery() ?>">
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_coal4->coal1_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_coal1_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_coal4" data-field="x_coal1_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_coal4->coal1_id->DisplayValueSeparatorAttribute() ?>" name="x_coal1_id" id="x_coal1_id" value="<?php echo $t_coal4->coal1_id->CurrentValue ?>"<?php echo $t_coal4->coal1_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_coal1_id" id="s_x_coal1_id" value="<?php echo $t_coal4->coal1_id->LookupFilterQuery() ?>">
 </span>
 <?php } ?>
-<?php echo $t_coal2->coal1_id->CustomMsg ?></div></div>
+<?php echo $t_coal4->coal1_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t_coal2->coal2_no->Visible) { // coal2_no ?>
-	<div id="r_coal2_no" class="form-group">
-		<label id="elh_t_coal2_coal2_no" for="x_coal2_no" class="col-sm-2 control-label ewLabel"><?php echo $t_coal2->coal2_no->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_coal2->coal2_no->CellAttributes() ?>>
-<span id="el_t_coal2_coal2_no">
-<input type="text" data-table="t_coal2" data-field="x_coal2_no" name="x_coal2_no" id="x_coal2_no" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($t_coal2->coal2_no->getPlaceHolder()) ?>" value="<?php echo $t_coal2->coal2_no->EditValue ?>"<?php echo $t_coal2->coal2_no->EditAttributes() ?>>
+<?php if ($t_coal4->coal2_id->Visible) { // coal2_id ?>
+	<div id="r_coal2_id" class="form-group">
+		<label id="elh_t_coal4_coal2_id" for="x_coal2_id" class="col-sm-2 control-label ewLabel"><?php echo $t_coal4->coal2_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_coal4->coal2_id->CellAttributes() ?>>
+<?php if ($t_coal4->coal2_id->getSessionValue() <> "") { ?>
+<span id="el_t_coal4_coal2_id">
+<span<?php echo $t_coal4->coal2_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_coal4->coal2_id->ViewValue ?></p></span>
 </span>
-<?php echo $t_coal2->coal2_no->CustomMsg ?></div></div>
+<input type="hidden" id="x_coal2_id" name="x_coal2_id" value="<?php echo ew_HtmlEncode($t_coal4->coal2_id->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_t_coal4_coal2_id">
+<?php $t_coal4->coal2_id->EditAttrs["onchange"] = "ew_UpdateOpt.call(this); " . @$t_coal4->coal2_id->EditAttrs["onchange"]; ?>
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_coal2_id"><?php echo (strval($t_coal4->coal2_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_coal4->coal2_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_coal4->coal2_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_coal2_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_coal4" data-field="x_coal2_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_coal4->coal2_id->DisplayValueSeparatorAttribute() ?>" name="x_coal2_id" id="x_coal2_id" value="<?php echo $t_coal4->coal2_id->CurrentValue ?>"<?php echo $t_coal4->coal2_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_coal2_id" id="s_x_coal2_id" value="<?php echo $t_coal4->coal2_id->LookupFilterQuery() ?>">
+</span>
+<?php } ?>
+<?php echo $t_coal4->coal2_id->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
-<?php if ($t_coal2->coal2_nm->Visible) { // coal2_nm ?>
-	<div id="r_coal2_nm" class="form-group">
-		<label id="elh_t_coal2_coal2_nm" for="x_coal2_nm" class="col-sm-2 control-label ewLabel"><?php echo $t_coal2->coal2_nm->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
-		<div class="col-sm-10"><div<?php echo $t_coal2->coal2_nm->CellAttributes() ?>>
-<span id="el_t_coal2_coal2_nm">
-<input type="text" data-table="t_coal2" data-field="x_coal2_nm" name="x_coal2_nm" id="x_coal2_nm" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($t_coal2->coal2_nm->getPlaceHolder()) ?>" value="<?php echo $t_coal2->coal2_nm->EditValue ?>"<?php echo $t_coal2->coal2_nm->EditAttributes() ?>>
+<?php if ($t_coal4->coal3_id->Visible) { // coal3_id ?>
+	<div id="r_coal3_id" class="form-group">
+		<label id="elh_t_coal4_coal3_id" for="x_coal3_id" class="col-sm-2 control-label ewLabel"><?php echo $t_coal4->coal3_id->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_coal4->coal3_id->CellAttributes() ?>>
+<?php if ($t_coal4->coal3_id->getSessionValue() <> "") { ?>
+<span id="el_t_coal4_coal3_id">
+<span<?php echo $t_coal4->coal3_id->ViewAttributes() ?>>
+<p class="form-control-static"><?php echo $t_coal4->coal3_id->ViewValue ?></p></span>
 </span>
-<?php echo $t_coal2->coal2_nm->CustomMsg ?></div></div>
+<input type="hidden" id="x_coal3_id" name="x_coal3_id" value="<?php echo ew_HtmlEncode($t_coal4->coal3_id->CurrentValue) ?>">
+<?php } else { ?>
+<span id="el_t_coal4_coal3_id">
+<span class="ewLookupList">
+	<span onclick="jQuery(this).parent().next().click();" tabindex="-1" class="form-control ewLookupText" id="lu_x_coal3_id"><?php echo (strval($t_coal4->coal3_id->ViewValue) == "" ? $Language->Phrase("PleaseSelect") : $t_coal4->coal3_id->ViewValue); ?></span>
+</span>
+<button type="button" title="<?php echo ew_HtmlEncode(str_replace("%s", ew_RemoveHtml($t_coal4->coal3_id->FldCaption()), $Language->Phrase("LookupLink", TRUE))) ?>" onclick="ew_ModalLookupShow({lnk:this,el:'x_coal3_id',m:0,n:10});" class="ewLookupBtn btn btn-default btn-sm"><span class="glyphicon glyphicon-search ewIcon"></span></button>
+<input type="hidden" data-table="t_coal4" data-field="x_coal3_id" data-multiple="0" data-lookup="1" data-value-separator="<?php echo $t_coal4->coal3_id->DisplayValueSeparatorAttribute() ?>" name="x_coal3_id" id="x_coal3_id" value="<?php echo $t_coal4->coal3_id->CurrentValue ?>"<?php echo $t_coal4->coal3_id->EditAttributes() ?>>
+<input type="hidden" name="s_x_coal3_id" id="s_x_coal3_id" value="<?php echo $t_coal4->coal3_id->LookupFilterQuery() ?>">
+</span>
+<?php } ?>
+<?php echo $t_coal4->coal3_id->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_coal4->coal4_no->Visible) { // coal4_no ?>
+	<div id="r_coal4_no" class="form-group">
+		<label id="elh_t_coal4_coal4_no" for="x_coal4_no" class="col-sm-2 control-label ewLabel"><?php echo $t_coal4->coal4_no->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_coal4->coal4_no->CellAttributes() ?>>
+<span id="el_t_coal4_coal4_no">
+<input type="text" data-table="t_coal4" data-field="x_coal4_no" name="x_coal4_no" id="x_coal4_no" size="30" maxlength="2" placeholder="<?php echo ew_HtmlEncode($t_coal4->coal4_no->getPlaceHolder()) ?>" value="<?php echo $t_coal4->coal4_no->EditValue ?>"<?php echo $t_coal4->coal4_no->EditAttributes() ?>>
+</span>
+<?php echo $t_coal4->coal4_no->CustomMsg ?></div></div>
+	</div>
+<?php } ?>
+<?php if ($t_coal4->coal4_nm->Visible) { // coal4_nm ?>
+	<div id="r_coal4_nm" class="form-group">
+		<label id="elh_t_coal4_coal4_nm" for="x_coal4_nm" class="col-sm-2 control-label ewLabel"><?php echo $t_coal4->coal4_nm->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
+		<div class="col-sm-10"><div<?php echo $t_coal4->coal4_nm->CellAttributes() ?>>
+<span id="el_t_coal4_coal4_nm">
+<input type="text" data-table="t_coal4" data-field="x_coal4_nm" name="x_coal4_nm" id="x_coal4_nm" size="30" maxlength="50" placeholder="<?php echo ew_HtmlEncode($t_coal4->coal4_nm->getPlaceHolder()) ?>" value="<?php echo $t_coal4->coal4_nm->EditValue ?>"<?php echo $t_coal4->coal4_nm->EditAttributes() ?>>
+</span>
+<?php echo $t_coal4->coal4_nm->CustomMsg ?></div></div>
 	</div>
 <?php } ?>
 </div>
-<input type="hidden" data-table="t_coal2" data-field="x_coal2_id" name="x_coal2_id" id="x_coal2_id" value="<?php echo ew_HtmlEncode($t_coal2->coal2_id->CurrentValue) ?>">
-<?php
-	if (in_array("t_coal3", explode(",", $t_coal2->getCurrentDetailTable())) && $t_coal3->DetailEdit) {
-?>
-<?php if ($t_coal2->getCurrentDetailTable() <> "") { ?>
-<h4 class="ewDetailCaption"><?php echo $Language->TablePhrase("t_coal3", "TblCaption") ?></h4>
-<?php } ?>
-<?php include_once "t_coal3grid.php" ?>
-<?php } ?>
-<?php if (!$t_coal2_edit->IsModal) { ?>
+<input type="hidden" data-table="t_coal4" data-field="x_coal4_id" name="x_coal4_id" id="x_coal4_id" value="<?php echo ew_HtmlEncode($t_coal4->coal4_id->CurrentValue) ?>">
+<?php if (!$t_coal4_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
 <button class="btn btn-primary ewButton" name="btnAction" id="btnAction" type="submit"><?php echo $Language->Phrase("SaveBtn") ?></button>
-<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_coal2_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
+<button class="btn btn-default ewButton" name="btnCancel" id="btnCancel" type="button" data-href="<?php echo $t_coal4_edit->getReturnUrl() ?>"><?php echo $Language->Phrase("CancelBtn") ?></button>
 	</div>
 </div>
-<?php if (!isset($t_coal2_edit->Pager)) $t_coal2_edit->Pager = new cPrevNextPager($t_coal2_edit->StartRec, $t_coal2_edit->DisplayRecs, $t_coal2_edit->TotalRecs) ?>
-<?php if ($t_coal2_edit->Pager->RecordCount > 0 && $t_coal2_edit->Pager->Visible) { ?>
+<?php if (!isset($t_coal4_edit->Pager)) $t_coal4_edit->Pager = new cPrevNextPager($t_coal4_edit->StartRec, $t_coal4_edit->DisplayRecs, $t_coal4_edit->TotalRecs) ?>
+<?php if ($t_coal4_edit->Pager->RecordCount > 0 && $t_coal4_edit->Pager->Visible) { ?>
 <div class="ewPager">
 <span><?php echo $Language->Phrase("Page") ?>&nbsp;</span>
 <div class="ewPrevNext"><div class="input-group">
 <div class="input-group-btn">
 <!--first page button-->
-	<?php if ($t_coal2_edit->Pager->FirstButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->FirstButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerFirst") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->FirstButton->Start ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerFirst") ?>"><span class="icon-first ewIcon"></span></a>
 	<?php } ?>
 <!--previous page button-->
-	<?php if ($t_coal2_edit->Pager->PrevButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->PrevButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerPrevious") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->PrevButton->Start ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerPrevious") ?>"><span class="icon-prev ewIcon"></span></a>
 	<?php } ?>
 </div>
 <!--current page number-->
-	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_coal2_edit->Pager->CurrentPage ?>">
+	<input class="form-control input-sm" type="text" name="<?php echo EW_TABLE_PAGE_NO ?>" value="<?php echo $t_coal4_edit->Pager->CurrentPage ?>">
 <div class="input-group-btn">
 <!--next page button-->
-	<?php if ($t_coal2_edit->Pager->NextButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->NextButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerNext") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->NextButton->Start ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerNext") ?>"><span class="icon-next ewIcon"></span></a>
 	<?php } ?>
 <!--last page button-->
-	<?php if ($t_coal2_edit->Pager->LastButton->Enabled) { ?>
-	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_coal2_edit->PageUrl() ?>start=<?php echo $t_coal2_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
+	<?php if ($t_coal4_edit->Pager->LastButton->Enabled) { ?>
+	<a class="btn btn-default btn-sm" title="<?php echo $Language->Phrase("PagerLast") ?>" href="<?php echo $t_coal4_edit->PageUrl() ?>start=<?php echo $t_coal4_edit->Pager->LastButton->Start ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } else { ?>
 	<a class="btn btn-default btn-sm disabled" title="<?php echo $Language->Phrase("PagerLast") ?>"><span class="icon-last ewIcon"></span></a>
 	<?php } ?>
 </div>
 </div>
 </div>
-<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_coal2_edit->Pager->PageCount ?></span>
+<span>&nbsp;<?php echo $Language->Phrase("of") ?>&nbsp;<?php echo $t_coal4_edit->Pager->PageCount ?></span>
 </div>
 <?php } ?>
 <div class="clearfix"></div>
 <?php } ?>
 </form>
 <script type="text/javascript">
-ft_coal2edit.Init();
+ft_coal4edit.Init();
 </script>
 <?php
-$t_coal2_edit->ShowPageFooter();
+$t_coal4_edit->ShowPageFooter();
 if (EW_DEBUG_ENABLED)
 	echo ew_DebugMsg();
 ?>
@@ -1460,5 +1685,5 @@ if (EW_DEBUG_ENABLED)
 </script>
 <?php include_once "footer.php" ?>
 <?php
-$t_coal2_edit->Page_Terminate();
+$t_coal4_edit->Page_Terminate();
 ?>

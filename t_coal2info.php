@@ -176,6 +176,31 @@ class ct_coal2 extends cTable {
 		return "`coal1_id`=@coal1_id@";
 	}
 
+	// Current detail table name
+	function getCurrentDetailTable() {
+		return @$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_DETAIL_TABLE];
+	}
+
+	function setCurrentDetailTable($v) {
+		$_SESSION[EW_PROJECT_NAME . "_" . $this->TableVar . "_" . EW_TABLE_DETAIL_TABLE] = $v;
+	}
+
+	// Get detail url
+	function GetDetailUrl() {
+
+		// Detail url
+		$sDetailUrl = "";
+		if ($this->getCurrentDetailTable() == "t_coal3") {
+			$sDetailUrl = $GLOBALS["t_coal3"]->GetListUrl() . "?" . EW_TABLE_SHOW_MASTER . "=" . $this->TableVar;
+			$sDetailUrl .= "&fk_coal2_id=" . urlencode($this->coal2_id->CurrentValue);
+			$sDetailUrl .= "&fk_coal1_id=" . urlencode($this->coal1_id->CurrentValue);
+		}
+		if ($sDetailUrl == "") {
+			$sDetailUrl = "t_coal2list.php";
+		}
+		return $sDetailUrl;
+	}
+
 	// Table level SQL
 	var $_SqlFrom = "";
 
@@ -208,7 +233,7 @@ class ct_coal2 extends cTable {
 	function getSqlSelectList() { // Select for List page
 		$select = "";
 		$select = "SELECT * FROM (" .
-			"SELECT *, (SELECT `coal1_nm` FROM `t_coal1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`coal1_id` = `t_coal2`.`coal1_id` LIMIT 1) AS `EV__coal1_id` FROM `t_coal2`" .
+			"SELECT *, (SELECT CONCAT(`coal1_no`,'" . ew_ValueSeparator(1, $this->coal1_id) . "',`coal1_nm`) FROM `t_coal1` `EW_TMP_LOOKUPTABLE` WHERE `EW_TMP_LOOKUPTABLE`.`coal1_id` = `t_coal2`.`coal1_id` LIMIT 1) AS `EV__coal1_id` FROM `t_coal2`" .
 			") `EW_TMP_TABLE`";
 		return ($this->_SqlSelectList <> "") ? $this->_SqlSelectList : $select;
 	}
@@ -473,6 +498,30 @@ class ct_coal2 extends cTable {
 	// Update
 	function Update(&$rs, $where = "", $rsold = NULL, $curfilter = TRUE) {
 		$conn = &$this->Connection();
+
+		// Cascade Update detail table 't_coal3'
+		$bCascadeUpdate = FALSE;
+		$rscascade = array();
+		if (!is_null($rsold) && (isset($rs['coal2_id']) && $rsold['coal2_id'] <> $rs['coal2_id'])) { // Update detail field 'coal2_id'
+			$bCascadeUpdate = TRUE;
+			$rscascade['coal2_id'] = $rs['coal2_id']; 
+		}
+		if (!is_null($rsold) && (isset($rs['coal1_id']) && $rsold['coal1_id'] <> $rs['coal1_id'])) { // Update detail field 'coal1_id'
+			$bCascadeUpdate = TRUE;
+			$rscascade['coal1_id'] = $rs['coal1_id']; 
+		}
+		if ($bCascadeUpdate) {
+			if (!isset($GLOBALS["t_coal3"])) $GLOBALS["t_coal3"] = new ct_coal3();
+			$rswrk = $GLOBALS["t_coal3"]->LoadRs("`coal2_id` = " . ew_QuotedValue($rsold['coal2_id'], EW_DATATYPE_NUMBER, 'DB') . " AND " . "(select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id) = " . ew_QuotedValue($rsold['coal1_id'], EW_DATATYPE_NUMBER, 'DB')); 
+			while ($rswrk && !$rswrk->EOF) {
+				$rskey = array();
+				$fldname = 'coal3_id';
+				$rskey[$fldname] = $rswrk->fields[$fldname];
+				$bUpdate = $GLOBALS["t_coal3"]->Update($rscascade, $rskey, $rswrk->fields);
+				if (!$bUpdate) return FALSE;
+				$rswrk->MoveNext();
+			}
+		}
 		$bUpdate = $conn->Execute($this->UpdateSQL($rs, $where, $curfilter));
 		if ($bUpdate && $this->AuditTrailOnEdit) {
 			$rsaudit = $rs;
@@ -504,6 +553,14 @@ class ct_coal2 extends cTable {
 	// Delete
 	function Delete(&$rs, $where = "", $curfilter = TRUE) {
 		$conn = &$this->Connection();
+
+		// Cascade delete detail table 't_coal3'
+		if (!isset($GLOBALS["t_coal3"])) $GLOBALS["t_coal3"] = new ct_coal3();
+		$rscascade = $GLOBALS["t_coal3"]->LoadRs("`coal2_id` = " . ew_QuotedValue($rs['coal2_id'], EW_DATATYPE_NUMBER, "DB") . " AND " . "(select coal1_id from t_coal2 where t_coal3.coal2_id = t_coal2.coal2_id) = " . ew_QuotedValue($rs['coal1_id'], EW_DATATYPE_NUMBER, "DB")); 
+		while ($rscascade && !$rscascade->EOF) {
+			$GLOBALS["t_coal3"]->Delete($rscascade->fields);
+			$rscascade->MoveNext();
+		}
 		$bDelete = $conn->Execute($this->DeleteSQL($rs, $where, $curfilter));
 		if ($bDelete && $this->AuditTrailOnDelete)
 			$this->WriteAuditTrailOnDelete($rs);
@@ -567,7 +624,10 @@ class ct_coal2 extends cTable {
 
 	// Edit URL
 	function GetEditUrl($parm = "") {
-		$url = $this->KeyUrl("t_coal2edit.php", $this->UrlParm($parm));
+		if ($parm <> "")
+			$url = $this->KeyUrl("t_coal2edit.php", $this->UrlParm($parm));
+		else
+			$url = $this->KeyUrl("t_coal2edit.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -579,7 +639,10 @@ class ct_coal2 extends cTable {
 
 	// Copy URL
 	function GetCopyUrl($parm = "") {
-		$url = $this->KeyUrl("t_coal2add.php", $this->UrlParm($parm));
+		if ($parm <> "")
+			$url = $this->KeyUrl("t_coal2add.php", $this->UrlParm($parm));
+		else
+			$url = $this->KeyUrl("t_coal2add.php", $this->UrlParm(EW_TABLE_SHOW_DETAIL . "="));
 		return $this->AddMasterUrl($url);
 	}
 
@@ -725,9 +788,9 @@ class ct_coal2 extends cTable {
 		} else {
 		if (strval($this->coal1_id->CurrentValue) <> "") {
 			$sFilterWrk = "`coal1_id`" . ew_SearchString("=", $this->coal1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `coal1_id`, `coal1_nm` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
+		$sSqlWrk = "SELECT `coal1_id`, `coal1_no` AS `DispFld`, `coal1_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
 		$sWhereWrk = "";
-		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_nm`');
+		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_no`', "dx2" => '`coal1_nm`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->coal1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -735,6 +798,7 @@ class ct_coal2 extends cTable {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->coal1_id->ViewValue = $this->coal1_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {
@@ -801,9 +865,9 @@ class ct_coal2 extends cTable {
 		} else {
 		if (strval($this->coal1_id->CurrentValue) <> "") {
 			$sFilterWrk = "`coal1_id`" . ew_SearchString("=", $this->coal1_id->CurrentValue, EW_DATATYPE_NUMBER, "");
-		$sSqlWrk = "SELECT `coal1_id`, `coal1_nm` AS `DispFld`, '' AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
+		$sSqlWrk = "SELECT `coal1_id`, `coal1_no` AS `DispFld`, `coal1_nm` AS `Disp2Fld`, '' AS `Disp3Fld`, '' AS `Disp4Fld` FROM `t_coal1`";
 		$sWhereWrk = "";
-		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_nm`');
+		$this->coal1_id->LookupFilters = array("dx1" => '`coal1_no`', "dx2" => '`coal1_nm`');
 		ew_AddFilter($sWhereWrk, $sFilterWrk);
 		$this->Lookup_Selecting($this->coal1_id, $sWhereWrk); // Call Lookup selecting
 		if ($sWhereWrk <> "") $sSqlWrk .= " WHERE " . $sWhereWrk;
@@ -811,6 +875,7 @@ class ct_coal2 extends cTable {
 			if ($rswrk && !$rswrk->EOF) { // Lookup values found
 				$arwrk = array();
 				$arwrk[1] = $rswrk->fields('DispFld');
+				$arwrk[2] = $rswrk->fields('Disp2Fld');
 				$this->coal1_id->ViewValue = $this->coal1_id->DisplayValue($arwrk);
 				$rswrk->Close();
 			} else {

@@ -274,6 +274,10 @@ class cdefault {
 			$this->Page_Terminate("t_coal2list.php");
 		if ($Security->AllowList(CurrentProjectID() . 't_user'))
 			$this->Page_Terminate("t_userlist.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_coal3'))
+			$this->Page_Terminate("t_coal3list.php");
+		if ($Security->AllowList(CurrentProjectID() . 't_coal4'))
+			$this->Page_Terminate("t_coal4list.php");
 		if ($Security->IsLoggedIn()) {
 			$this->setFailureMessage(ew_DeniedMsg() . "<br><br><a href=\"logout.php\">" . $Language->Phrase("BackToLogin") . "</a>");
 		} else {
