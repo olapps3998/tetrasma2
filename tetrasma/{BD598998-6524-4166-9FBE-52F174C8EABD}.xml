@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <configuration date="2017/05/04" author="e.World Technology Ltd.">
-  <project id="{BD598998-6524-4166-9FBE-52F174C8EABD}" file="D:\xampp\htdocs\tetrasma2\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/05/04 17:02:12" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
-    <table id="t_coal1" name="t_coal1" caption="COA Lv. 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="t_coal2" name="t_coal2" caption="COA Lv. 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+  <project id="{BD598998-6524-4166-9FBE-52F174C8EABD}" file="D:\xampp\htdocs\tetrasma2\tetrasma.pmp" name="tetrasma" product="PHPMaker" version="13.0" datetime="2017/05/04 22:55:50" languagefolder="phplang" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0">
+    <table id="t_coal1" name="t_coal1" caption="Lv. 1" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_coal2" name="t_coal2" caption="Lv. 2" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_audittrail" name="t_audittrail" caption="t audittrail" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="t_user" name="t_user" caption="t user" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_user" name="t_user" caption="User" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="home_php" name="home.php" caption="Home" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
     <table id="t_coal3" name="t_coal3" caption="Lv. 3" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
-    <table id="t_coal4" name="t_coal4" caption="Chart of Account" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="t_coal4" name="t_coal4" caption="Lv. 4" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
+    <table id="v_coa_php" name="v_coa.php" caption="Chart of Account" userlevel="-2,&quot;Anonymous&quot;,0;0,&quot;Default&quot;,0" priv="1" />
   </project>
 </configuration>

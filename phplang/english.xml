@@ -589,7 +589,7 @@
     <menu id="6">
       <phrase id="menutext" value="Setup" />
     </menu>
-    <menu id="14">
+    <menu id="15">
       <phrase id="menutext" value="Chart of Account" />
     </menu>
     <menu id="1">
@@ -601,8 +601,11 @@
     <menu id="13">
       <phrase id="menutext" value="Lv. 3" />
     </menu>
+    <menu id="14">
+      <phrase id="menutext" value="Lv. 4" />
+    </menu>
     <menu id="4">
-      <phrase id="menutext" value="t user" />
+      <phrase id="menutext" value="User" />
     </menu>
     <menu id="7">
       <phrase id="menutext" value="Report" />
@@ -611,7 +614,7 @@
       <phrase id="menutext" value="t audittrail" />
     </menu>
     <table id="t_coal1">
-      <phrase id="tblcaption" value="COA Lv. 1" />
+      <phrase id="tblcaption" value="Lv. 1" />
       <field id="coal1_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -623,7 +626,7 @@
       </field>
     </table>
     <table id="t_coal2">
-      <phrase id="tblcaption" value="COA Lv. 2" />
+      <phrase id="tblcaption" value="Lv. 2" />
       <field id="coal2_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -671,18 +674,18 @@
       </field>
     </table>
     <table id="t_user">
-      <phrase id="tblcaption" value="t user" />
+      <phrase id="tblcaption" value="User" />
       <field id="user_id">
-        <phrase id="fldcaption" value="user id" />
+        <phrase id="fldcaption" value="ID" />
       </field>
       <field id="user_nm">
-        <phrase id="fldcaption" value="user nm" />
+        <phrase id="fldcaption" value="User Name" />
       </field>
       <field id="user_pw">
-        <phrase id="fldcaption" value="user pw" />
+        <phrase id="fldcaption" value="Password" />
       </field>
       <field id="user_lv">
-        <phrase id="fldcaption" value="user lv" />
+        <phrase id="fldcaption" value="User Level" />
         <phrase id="fldtagvalue1" value="-2" />
         <phrase id="fldtagcaption1" value="Anonymous" />
         <phrase id="fldtagvalue2" value="-1" />
@@ -713,7 +716,7 @@
       </field>
     </table>
     <table id="t_coal4">
-      <phrase id="tblcaption" value="Chart of Account" />
+      <phrase id="tblcaption" value="Lv. 4" />
       <field id="coal4_id">
         <phrase id="fldcaption" value="ID" />
       </field>
@@ -732,6 +735,9 @@
       <field id="coal4_nm">
         <phrase id="fldcaption" value="Nama" />
       </field>
+    </table>
+    <table id="v_coa_php">
+      <phrase id="tblcaption" value="Chart of Account" />
     </table>
   </project>
 </ew-language>

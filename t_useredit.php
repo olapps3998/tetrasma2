@@ -285,8 +285,6 @@ class ct_user_edit extends ct_user {
 		// Create form object
 		$objForm = new cFormObj();
 		$this->CurrentAction = (@$_GET["a"] <> "") ? $_GET["a"] : @$_POST["a_list"]; // Set up current action
-		$this->user_id->SetVisibility();
-		$this->user_id->Visible = !$this->IsAdd() && !$this->IsCopy() && !$this->IsGridAdd();
 		$this->user_nm->SetVisibility();
 		$this->user_pw->SetVisibility();
 		$this->user_lv->SetVisibility();
@@ -541,8 +539,6 @@ class ct_user_edit extends ct_user {
 
 		// Load from form
 		global $objForm;
-		if (!$this->user_id->FldIsDetailKey)
-			$this->user_id->setFormValue($objForm->GetValue("x_user_id"));
 		if (!$this->user_nm->FldIsDetailKey) {
 			$this->user_nm->setFormValue($objForm->GetValue("x_user_nm"));
 		}
@@ -552,6 +548,8 @@ class ct_user_edit extends ct_user {
 		if (!$this->user_lv->FldIsDetailKey) {
 			$this->user_lv->setFormValue($objForm->GetValue("x_user_lv"));
 		}
+		if (!$this->user_id->FldIsDetailKey)
+			$this->user_id->setFormValue($objForm->GetValue("x_user_id"));
 	}
 
 	// Restore form values
@@ -685,11 +683,6 @@ class ct_user_edit extends ct_user {
 		}
 		$this->user_lv->ViewCustomAttributes = "";
 
-			// user_id
-			$this->user_id->LinkCustomAttributes = "";
-			$this->user_id->HrefValue = "";
-			$this->user_id->TooltipValue = "";
-
 			// user_nm
 			$this->user_nm->LinkCustomAttributes = "";
 			$this->user_nm->HrefValue = "";
@@ -705,12 +698,6 @@ class ct_user_edit extends ct_user {
 			$this->user_lv->HrefValue = "";
 			$this->user_lv->TooltipValue = "";
 		} elseif ($this->RowType == EW_ROWTYPE_EDIT) { // Edit row
-
-			// user_id
-			$this->user_id->EditAttrs["class"] = "form-control";
-			$this->user_id->EditCustomAttributes = "";
-			$this->user_id->EditValue = $this->user_id->CurrentValue;
-			$this->user_id->ViewCustomAttributes = "";
 
 			// user_nm
 			$this->user_nm->EditAttrs["class"] = "form-control";
@@ -734,12 +721,8 @@ class ct_user_edit extends ct_user {
 			}
 
 			// Edit refer script
-			// user_id
-
-			$this->user_id->LinkCustomAttributes = "";
-			$this->user_id->HrefValue = "";
-
 			// user_nm
+
 			$this->user_nm->LinkCustomAttributes = "";
 			$this->user_nm->HrefValue = "";
 
@@ -1125,18 +1108,6 @@ $t_user_edit->ShowMessage();
 <input class="hidden" type="text" name="<?php echo ew_Encrypt(ew_Random()) ?>">
 <input class="hidden" type="password" name="<?php echo ew_Encrypt(ew_Random()) ?>">
 <div>
-<?php if ($t_user->user_id->Visible) { // user_id ?>
-	<div id="r_user_id" class="form-group">
-		<label id="elh_t_user_user_id" class="col-sm-2 control-label ewLabel"><?php echo $t_user->user_id->FldCaption() ?></label>
-		<div class="col-sm-10"><div<?php echo $t_user->user_id->CellAttributes() ?>>
-<span id="el_t_user_user_id">
-<span<?php echo $t_user->user_id->ViewAttributes() ?>>
-<p class="form-control-static"><?php echo $t_user->user_id->EditValue ?></p></span>
-</span>
-<input type="hidden" data-table="t_user" data-field="x_user_id" name="x_user_id" id="x_user_id" value="<?php echo ew_HtmlEncode($t_user->user_id->CurrentValue) ?>">
-<?php echo $t_user->user_id->CustomMsg ?></div></div>
-	</div>
-<?php } ?>
 <?php if ($t_user->user_nm->Visible) { // user_nm ?>
 	<div id="r_user_nm" class="form-group">
 		<label id="elh_t_user_user_nm" for="x_user_nm" class="col-sm-2 control-label ewLabel"><?php echo $t_user->user_nm->FldCaption() ?><?php echo $Language->Phrase("FieldRequiredIndicator") ?></label>
@@ -1185,6 +1156,7 @@ $t_user_edit->ShowMessage();
 	</div>
 <?php } ?>
 </div>
+<input type="hidden" data-table="t_user" data-field="x_user_id" name="x_user_id" id="x_user_id" value="<?php echo ew_HtmlEncode($t_user->user_id->CurrentValue) ?>">
 <?php if (!$t_user_edit->IsModal) { ?>
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-10">
