@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 04, 2017 at 05:22 PM
+-- Generation Time: May 05, 2017 at 05:04 PM
 -- Server version: 5.1.41
 -- PHP Version: 5.3.1
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `t_audittrail` (
   `oldvalue` longtext,
   `newvalue` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=582 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=590 ;
 
 --
 -- Dumping data for table `t_audittrail`
@@ -625,7 +625,15 @@ INSERT INTO `t_audittrail` (`id`, `datetime`, `script`, `user`, `action`, `table
 (578, '2017-05-04 10:22:25', '/tetrasma2/t_coal4list.php', '1', 'A', 't_coal4', 'coal3_id', '62', '', '16'),
 (579, '2017-05-04 10:22:25', '/tetrasma2/t_coal4list.php', '1', 'A', 't_coal4', 'coal4_no', '62', '', '99'),
 (580, '2017-05-04 10:22:25', '/tetrasma2/t_coal4list.php', '1', 'A', 't_coal4', 'coal4_nm', '62', '', 'Biaya Kary. Lain-Lain'),
-(581, '2017-05-04 10:22:25', '/tetrasma2/t_coal4list.php', '1', 'A', 't_coal4', 'coal4_id', '62', '', '62');
+(581, '2017-05-04 10:22:25', '/tetrasma2/t_coal4list.php', '1', 'A', 't_coal4', 'coal4_id', '62', '', '62'),
+(582, '2017-05-05 01:49:11', '/tetrasma2/login.php', 'admin', 'login', '::1', '', '', '', ''),
+(583, '2017-05-05 02:44:12', '/tetrasma2/t_jurnallist.php', '1', 'A', 't_jurnal', 'no_bukti', '1', '', '1'),
+(584, '2017-05-05 02:44:12', '/tetrasma2/t_jurnallist.php', '1', 'A', 't_jurnal', 'tgl', '1', '', '2017-05-04'),
+(585, '2017-05-05 02:44:12', '/tetrasma2/t_jurnallist.php', '1', 'A', 't_jurnal', 'ket', '1', '', 'x'),
+(586, '2017-05-05 02:44:12', '/tetrasma2/t_jurnallist.php', '1', 'A', 't_jurnal', 'jurnal_id', '1', '', '1'),
+(587, '2017-05-05 02:45:08', '/tetrasma2/t_jurnallist.php', '1', 'U', 't_jurnal', 'tgl', '1', '2017-03-02', '2017-05-04'),
+(588, '2017-05-05 02:46:54', '/tetrasma2/t_jurnallist.php', '1', 'U', 't_jurnal', 'tgl', '1', '2017-01-05', '2017-03-02'),
+(589, '2017-05-05 10:01:32', '/tetrasma2/login.php', 'admin', 'login', '::1', '', '', '', '');
 
 -- --------------------------------------------------------
 
