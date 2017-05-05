@@ -11,6 +11,7 @@ $RootMenu->AddMenuItem(2, "mmi_t_coal2", $Language->MenuPhrase("2", "MenuText"),
 $RootMenu->AddMenuItem(13, "mmi_t_coal3", $Language->MenuPhrase("13", "MenuText"), "t_coal3list.php?cmd=resetall", 15, "", AllowListMenu('{BD598998-6524-4166-9FBE-52F174C8EABD}t_coal3'), FALSE, FALSE);
 $RootMenu->AddMenuItem(14, "mmi_t_coal4", $Language->MenuPhrase("14", "MenuText"), "t_coal4list.php?cmd=resetall", 15, "", AllowListMenu('{BD598998-6524-4166-9FBE-52F174C8EABD}t_coal4'), FALSE, FALSE);
 $RootMenu->AddMenuItem(4, "mmi_t_user", $Language->MenuPhrase("4", "MenuText"), "t_userlist.php", 6, "", AllowListMenu('{BD598998-6524-4166-9FBE-52F174C8EABD}t_user'), FALSE, FALSE);
+$RootMenu->AddMenuItem(28, "mmci_Input", $Language->MenuPhrase("28", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
 $RootMenu->AddMenuItem(7, "mmci_Report", $Language->MenuPhrase("7", "MenuText"), "", -1, "", TRUE, FALSE, TRUE);
 $RootMenu->AddMenuItem(-2, "mmi_changepwd", $Language->Phrase("ChangePwd"), "changepwd.php", -1, "", IsLoggedIn() && !IsSysAdmin());
 $RootMenu->AddMenuItem(-1, "mmi_logout", $Language->Phrase("Logout"), "logout.php", -1, "", IsLoggedIn());
